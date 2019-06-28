@@ -75,3 +75,7 @@ void cProstokat::obroc() {
 	a_ = b_;
 	b_ = tmp;
 }
+void cProstokat::set_wartoscx_oraz_y(int wartosc_x, int wartosc_y) {
+	x_ = wartosc_x;
+	y_ = wartosc_y;
+}

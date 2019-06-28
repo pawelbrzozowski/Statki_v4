@@ -24,6 +24,7 @@ void mouse_move_binding(int x, int y);
 class cScena {
     std::vector<cProstokat> flota;
 	std::vector<cProstokat> flota_przeciwnika;
+	std::vector<cProstokat> flota_przeciwnika_ustawiona_losowo;
 	std::vector<cPrzycisk> przyciski;
 	std::vector<cStrzal> pociski;
 
@@ -42,6 +43,8 @@ public:
     void set_callbacks();
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
+
+	void sprawdz_i_wstaw(cProstokat el,int licznik);
 
 	void set_ostanio_uzyte_id_statku(int wartosc);
 	int get_ostanio_uzyte_id_statku();

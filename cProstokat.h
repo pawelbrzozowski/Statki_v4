@@ -22,6 +22,7 @@ public:
 	bool isUnclicked(double openglX, double openglY);
 	void dane();
 	void obroc();
+	void set_wartoscx_oraz_y(int wartosc_x,int wartosc_y);
 	double get_x();
 	double get_y();
 	double get_a();

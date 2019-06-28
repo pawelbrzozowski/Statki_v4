@@ -43,37 +43,37 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 
 	 ////// GENEROWANIE FLOTY PRZECIWNIKA ////////
 
-	cProstokat cztermasztowiec_przeciwnika(25, 9, 4,1, 4, 1, 1);
+	cProstokat cztermasztowiec_przeciwnika(250, 9, 4,1, 4, 1, 1);
 	flota_przeciwnika.push_back(cztermasztowiec_przeciwnika);
 
-	cProstokat trojmasztowiec_1_przeciwnika(21, 7, 3,2, 3, 1, 2);
+	cProstokat trojmasztowiec_1_przeciwnika(210, 7, 3,2, 3, 1, 2);
 	flota_przeciwnika.push_back(trojmasztowiec_1_przeciwnika);
 
-	cProstokat trojmasztowiec_2_przeciwnika(26, 7, 3,3, 3, 1, 3);
+	cProstokat trojmasztowiec_2_przeciwnika(260, 7, 3,3, 3, 1, 3);
 	flota_przeciwnika.push_back(trojmasztowiec_2_przeciwnika);
 
-	cProstokat dwumasztowiec_1_przeciwnika(21, 5, 2,4, 2, 1, 4);
+	cProstokat dwumasztowiec_1_przeciwnika(210, 5, 2,4, 2, 1, 4);
 	flota_przeciwnika.push_back(dwumasztowiec_1_przeciwnika);
 
-	cProstokat dwumasztowiec_2_przeciwnika(24, 5, 2,5, 2, 1, 5);
+	cProstokat dwumasztowiec_2_przeciwnika(240, 5, 2,5, 2, 1, 5);
 	flota_przeciwnika.push_back(dwumasztowiec_2_przeciwnika);
 
-	cProstokat dwumasztowiec_3_przeciwnika(27, 5, 2,6, 2, 1, 6);
+	cProstokat dwumasztowiec_3_przeciwnika(270, 5, 2,6, 2, 1, 6);
 	flota_przeciwnika.push_back(dwumasztowiec_3_przeciwnika);
 
-	cProstokat jednomasztowiec_1_przeciwnika(22, 3, 1,7, 1, 1, 7);
+	cProstokat jednomasztowiec_1_przeciwnika(220, 3, 1,7, 1, 1, 7);
 	flota_przeciwnika.push_back(jednomasztowiec_1_przeciwnika);
 
-	cProstokat jednomasztowiec_2_przeciwnika(24, 3, 1,8, 1, 1, 8);
+	cProstokat jednomasztowiec_2_przeciwnika(240, 3, 1,8, 1, 1, 8);
 	flota_przeciwnika.push_back(jednomasztowiec_2_przeciwnika);
 
-	cProstokat jednomasztowiec_3_przeciwnika(26, 3, 1,9, 1, 1, 9);
+	cProstokat jednomasztowiec_3_przeciwnika(260, 3, 1,9, 1, 1, 9);
 	flota_przeciwnika.push_back(jednomasztowiec_3_przeciwnika);
 
-	cProstokat jednomasztowiec_4_przeciwnika(28, 3, 1,10, 1, 1, 10);
+	cProstokat jednomasztowiec_4_przeciwnika(280, 3, 1,10, 1, 1, 10);
 	flota_przeciwnika.push_back(jednomasztowiec_4_przeciwnika);
 
-	//ustaw_statki_przeciwnika_losowo();
+	ustaw_statki_przeciwnika_losowo();
 
 	//DODAJEMY PRZYCYSKI
 	cPrzycisk przyczik_obroc(10.5, 0.5, 1, 1, 1, 0.7, 0.7,0);
@@ -96,34 +96,40 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 	pociski.push_back(zwykly_strzal);
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
-	/*srand(time(NULL));
+	srand(time(NULL));
+	int licznik = 1;
 	for (auto& el : flota_przeciwnika) {
-		if (licznik_ustawiania_losowego == 0)
+		licznik++;
+		sprawdz_i_wstaw(el, licznik++);
+	}
+
+}
+void cScena::sprawdz_i_wstaw(cProstokat element, int licznik) {
+	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
+	double wylosowana_x = (std::rand() % 10) + 19;
+	double wylosowana_y = (std::rand() % 10) + 0;
+	if (licznik == 1)
+	{
+		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+		flota_przeciwnika_ustawiona_losowo.push_back(element);
+	}
+	if (licznik > 1)
+	{
+
+		for (auto& el : flota_przeciwnika_ustawiona_losowo)
 		{
-			do{
-			double wylosowana_x = (std::rand() % 10) + 19;
-			double wylosowana_y = (std::rand() % 10) + 0;
-			while (sprawdz_i_wstaw(el, x, y));
-			//el.set_nowa_pozycja_po_losowym_ustaweniu(tmp1, tmp2);
-			
-		}
-		else
-		{
-			int abc = 0;
-			double wylosowana_x = (std::rand() % 10) + 19;
-			double wylosowana_y = (std::rand() % 10) + 0;
-			double tmp1, tmp2;
-			tmp1 = round(wylosowana_x);
-			tmp2 = round(wylosowana_y);
-			for (int i = 0; i < licznik_ustawiania_losowego; i++)
+			if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
 			{
-				if (tmp1 <(flota_przeciwnika[i].get_x() + flota_przeciwnika[i].get_a()) && tmp1 >flota_przeciwnika[i].get_x() && tmp2< (flota_przeciwnika[i].get_y() + flota_przeciwnika[i].get_b()) && tmp2 >flota_przeciwnika[i].get_y())
-					abc++;
+				std::cout << "NASTAPILA KOLIZJA! " << std::endl;
+				sprawdz_i_wstaw(element, licznik_do_ewentualnego_wywolania_jeszcze_raz);
+				break;
 			}
-			if(abc== licznik_ustawiania_losowego)
-				el.set_nowa_pozycja_po_losowym_ustaweniu(tmp1, tmp2);
 		}
-	}*/
+		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+		flota_przeciwnika_ustawiona_losowo.push_back(element);
+	}
+	
+
 }
 void cScena::resize(int width, int height) {
    
@@ -150,7 +156,7 @@ void cScena::display() {
 	siatka_2.rysuj_siatke();
 	glPushMatrix();
 	{
-		for (auto& el : flota_przeciwnika)
+		for (auto& el : flota_przeciwnika_ustawiona_losowo)
 			el.rysuj();
 	}
 	glPushMatrix();
@@ -287,7 +293,8 @@ void cScena::mouse_move(int x, int y) {
 				el.podazaj_za_myszka(openglX, openglY);
 			}
 		}
-	}	
+	}
+	
 }
 void cScena::set_ostanio_uzyte_id_statku(int wartosc) {
 	ostanio_uzyte_id_ = wartosc;
