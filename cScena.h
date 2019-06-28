@@ -24,12 +24,14 @@ class cScena {
     std::vector<cProstokat> flota;
 	std::vector<cProstokat> flota_przeciwnika;
 	std::vector<cPrzycisk> przyciski;
+	std::vector<cStrzal> pociski;
+
 	int ostanio_uzyte_id_;
 	int aktualnie_przersuwany_statek_;
-	bool mozna_obrocic_;
+	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_;
 
 public:
-    cScena(int ostuzid=0, bool mozna_obr= false, int aktualnieprzesuwstatek = 0);
+    cScena(int ostuzid=0, bool mozna_obr= false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false);
 	void idle();
 	void ustaw_statki_przeciwnika_losowo();
     void resize(int width, int height);
@@ -39,12 +41,16 @@ public:
     void set_callbacks();
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
+
 	void set_ostanio_uzyte_id_statku(int wartosc);
 	int get_ostanio_uzyte_id_statku();
 	void set_mozna_obrocic_statek(int wartosc);
 	bool get_mozna_obrocic_statek();
 	void set_aktualnie_przesuwany_statek(int wartosc);
 	int get_aktualnie_przesuwany_statek();
+
+	void set_czy_mozna_wyswietlic_menu_strzalow(int wartosc);
+	bool get_czy_mozna_wyswietlic_menu_strzalow();
 };
 
 

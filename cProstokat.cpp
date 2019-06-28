@@ -18,7 +18,7 @@ void cProstokat::rysuj() {
 	glRectd(x_, y_, x_ + a_, y_ + b_);
 }
 void cProstokat::dane() {
-	std::cout << "Klinieto na prosotkat (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "masztowiec " << "ID STATKU ---> " << id_ << endl;
+	std::cout << "Klinieto na statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "masztowiec " << "ID STATKU ---> " << id_ << endl;
 }
 void cProstokat::set_kolor(float r, float g, float b) {
 	red_ = r;

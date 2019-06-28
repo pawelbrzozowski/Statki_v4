@@ -10,7 +10,7 @@
 #define WIELKOSC_OKNA_X 1102
 #define WIELKOSC_OKNA_Y 380
 cSiatka siatka_1,siatka_2;
-cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek): ostanio_uzyte_id_(ostuzid) , mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek){
+cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu): ostanio_uzyte_id_(ostuzid) , mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu){
 	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1,1);
 	flota.push_back(cztermasztowiec);
 
@@ -75,12 +75,25 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek): ostanio
 
 	//ustaw_statki_przeciwnika_losowo();
 
-	
+	//DODAJEMY PRZYCYSKI
 	cPrzycisk przyczik_obroc(10.5, 0.5, 1, 1, 1, 0.7, 0.7,0);
 	przyciski.push_back(przyczik_obroc);
 
 	cPrzycisk przycisk_dalej(14, 0.5, 2, 2,1,0.7,0.7,0);
 	przyciski.push_back(przycisk_dalej);
+
+	//DODAJEMY STRZALY
+	cStrzal nalot_samolotu(11, 8.5, 1, 2, false);
+	pociski.push_back(nalot_samolotu);
+
+	cStrzal bombardowanie(11, 6, 2, 1, false);
+	pociski.push_back(bombardowanie);
+
+	cStrzal torpeda(11, 4.5, 3, 2, false);
+	pociski.push_back(torpeda);
+
+	cStrzal zwykly_strzal(11, 3,4, 1000, true);
+	pociski.push_back(zwykly_strzal);
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
 	/*srand(time(NULL));
@@ -152,6 +165,18 @@ void cScena::display() {
 			el.rysuj();
 	}
 	glPopMatrix();
+
+	if(get_czy_mozna_wyswietlic_menu_strzalow()==true)
+	{
+		glPushMatrix();
+		{
+			for (auto& el : pociski)
+				el.rysuj();
+		}
+		glPopMatrix();
+		
+	}
+
     glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
 }
 
@@ -208,6 +233,13 @@ void cScena::mouse(int button, int state, int x, int y) {
 					el.obroc();
 					set_ostanio_uzyte_id_statku(0);
 					set_mozna_obrocic_statek(false);
+					for (auto& el : przyciski)
+					{
+						if (el.get_typ() == 1)
+						{
+							el.dane();
+						}
+					}
 				}
 			}
 			
@@ -217,15 +249,16 @@ void cScena::mouse(int button, int state, int x, int y) {
 		{
 			if (el.isClicked(openglX, openglY))
 			{
-				el.dane();
 				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
-					std::cout << "stan przycisku: " << el.get_stan_klikniety() << std::endl;
+					std::cout << "KLIKNIETO DALEJ " << std::endl;
+					set_czy_mozna_wyswietlic_menu_strzalow(true);
 				}
 				if (el.get_typ() == 1)
 				{
 					set_mozna_obrocic_statek(true); //ustwaimy parametr sceny mozna_orocic na true
 				}
+				el.dane();
 			}
 		}
 	}
@@ -273,4 +306,10 @@ void cScena::set_aktualnie_przesuwany_statek(int wartosc) {
 }
 int cScena::get_aktualnie_przesuwany_statek() {
 	return aktualnie_przersuwany_statek_;
+}
+void cScena::set_czy_mozna_wyswietlic_menu_strzalow(int wartosc) {
+	czy_wyswietlac_menu_strzalow_ = wartosc;
+}
+bool cScena::get_czy_mozna_wyswietlic_menu_strzalow() {
+	return czy_wyswietlac_menu_strzalow_;
 }

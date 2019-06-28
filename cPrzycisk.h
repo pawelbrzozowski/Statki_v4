@@ -23,4 +23,4 @@ public:
 };
 
 
-#endif //FREEGLUT_CPROSTOKAT_H
+#endif 
