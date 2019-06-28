@@ -29,12 +29,12 @@ class cScena {
 	std::vector<cPrzycisk> przyciski;
 	std::vector<cStrzal> pociski;
 
-	int ostanio_uzyte_id_;
+	int ostanio_uzyte_id_, liczba_losowych_rozstawien=0;
 	int aktualnie_przersuwany_statek_;
-	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_;
+	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_,czy_statki_gracza_sa_ustawione_,czy_wyswietlac_juz_statki_gracza_;
 
 public:
-	cScena(int ostuzid = 0, bool mozna_obr = false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false);
+	cScena(int ostuzid = 0, bool mozna_obr = false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false, bool czy_statki_gracza_losowo=false, bool czy_wyswietlac_juz_statki_gracza=false);
 	void idle();
 	void ustaw_statki_przeciwnika_losowo();
 	void ustaw_statki_gracza_losowo();
@@ -45,9 +45,9 @@ public:
 	void set_callbacks();
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
-
+	void wyczysc_dane_ustawionej_floty();
 	void sprawdz_i_wstaw(cProstokat element, int licznik, int& liczba_obroconych_elementow, int max_liczba_obronych_elementow);
-	void sprawdz_i_wstaw_gracz(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik);
+	void sprawdz_i_wstaw_gracz(cProstokat element, int licznik, int& liczba_obroconych_elementow, int max_liczba_obronych_elementow);
 	void set_ostanio_uzyte_id_statku(int wartosc);
 	int get_ostanio_uzyte_id_statku();
 	void set_mozna_obrocic_statek(int wartosc);

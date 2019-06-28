@@ -10,7 +10,7 @@
 #define WIELKOSC_OKNA_X 1102
 #define WIELKOSC_OKNA_Y 380
 cSiatka siatka_1, siatka_2;
-cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu) : ostanio_uzyte_id_(ostuzid), mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu) {
+cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu, bool czy_statki_gracza_losowo, bool czy_wyswietlac_juz_statki_gracza) : ostanio_uzyte_id_(ostuzid), mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu),czy_statki_gracza_sa_ustawione_(czy_statki_gracza_losowo),czy_wyswietlac_juz_statki_gracza_(czy_wyswietlac_juz_statki_gracza){
 	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1, 1);
 	flota.push_back(cztermasztowiec);
 
@@ -113,17 +113,166 @@ void cScena::ustaw_statki_przeciwnika_losowo() {
 
 }
 void cScena::ustaw_statki_gracza_losowo() {
-	int licznik = 1;
+	int licznik = 1, liczba_obroconych = 0;
 	srand(time(NULL));
+	int max_liczba_obronych_elementow = (std::rand() % 10);
 	for (auto& el : flota) {
 		licznik++;
-		//sprawdz_i_wstaw(el, licznik);
+		sprawdz_i_wstaw_gracz(el, licznik, liczba_obroconych, max_liczba_obronych_elementow);
 	}
-	for (auto& el : flota_przeciwnika_ustawiona_losowo) {
+	for (auto& el : flota)//nasze ellementy wektora rysujemy dalej, aby nie wyswietlaly sie poniewaz ustawiamy statki w innym vektorze
+	{
+		el.set_wartoscx_oraz_y(1000, 1000);
+	}
+	std::cout << "DANE DLA FLOTY GRACZA:" << std::endl << std::endl;
+	for (auto& el : flota_ustawiona) {
 		el.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statki zostal umieszonczy 
 	}
 }
+void cScena::wyczysc_dane_ustawionej_floty() {
+	
+	flota_ustawiona.clear();
+}
+void cScena::sprawdz_i_wstaw_gracz(cProstokat element, int licznik, int& liczba_obroconych, int max_liczba_obronych_elementow)
+{
+	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
+	int liczba_obroconych_elementow = liczba_obroconych;
+	double wylosowana_x = (std::rand() % 10);
+	double wylosowana_y = (std::rand() % 10);
+	int czy_obrocic = (std::rand() % 10);
+	bool czy_byla_kolizja = false, czy_byl_problem_z_odwroceniem = false;
 
+	if (czy_obrocic >= 5) //tutaj poprostu odwracamy element
+	{
+		if (liczba_obroconych_elementow < max_liczba_obronych_elementow)//losowa ilosc max obronych el.
+		{
+			int obszar_x, obszar_y;
+			obszar_x = element.get_b() + wylosowana_x;
+			obszar_y = element.get_a() + wylosowana_y;
+			if ((obszar_x < 10) && (obszar_y < 10))
+			{
+				if (licznik == 1) //nie trzeba sprawdzac czy nastapi kolizja
+				{
+					element.obroc();
+					element.set_juz_mnie_obracano(true);
+					liczba_obroconych_elementow++;
+				}
+				if (licznik > 1)
+				{
+					for (auto& el : flota_ustawiona)
+					{
+						int obszar_min_x, obszar_max_x, obszar_min_y, obszar_max_y;
+						obszar_min_x = el.get_x() - 1;
+						obszar_max_x = el.get_x() + el.get_a() + 1;
+						obszar_min_y = el.get_y() - 1;
+						obszar_max_y = el.get_y() + el.get_b() + 1;
+						if (((wylosowana_x >= obszar_min_x) && (wylosowana_x < obszar_max_x)) && ((wylosowana_y >= obszar_min_y) && (wylosowana_y < obszar_max_y)))
+						{
+							czy_byl_problem_z_odwroceniem = true;
+							break;
+						}
+					}
+					if (czy_byl_problem_z_odwroceniem == false)
+					{
+						element.obroc();
+						element.set_juz_mnie_obracano(true);
+						liczba_obroconych_elementow++;
+					}
+					czy_byl_problem_z_odwroceniem = false;
+				}
+			}
+		}
+	}
+	if (licznik == 1)
+	{
+		int obszar_x, obszar_y;
+		obszar_x = element.get_a() + wylosowana_x;
+		obszar_y = element.get_b() + wylosowana_y;
+		if ((obszar_x < 10) && (obszar_y < 10)) // ewentualne sprawdzenie czy jest blad i stsatek wsyatje z planszy
+		{
+			element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+			flota_ustawiona.push_back(element);
+		}
+		else
+		{
+			std::cout << "Statek z id=[ " << element.get_id() << " ] wystaje z planszy" << std::endl << std::endl;
+			sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+		}
+
+	}
+	if (licznik > 1)
+	{
+		for (auto& el : flota_ustawiona)
+		{
+			int obszar_min_x_juz_zarezerowany, obszar_max_x_juz_zarezerowany, obszar_min_y_juz_zarezerowany, obszar_max_y_juz_zarezerowany;
+			obszar_min_x_juz_zarezerowany = el.get_x() - 1;
+			obszar_max_x_juz_zarezerowany = el.get_x() + el.get_a() + 1;
+			obszar_min_y_juz_zarezerowany = el.get_y() - 1;
+			obszar_max_y_juz_zarezerowany = el.get_y() + el.get_b() + 1;
+			int lewy_dolny_x, lewy_dolny_y, prawy_dolny_x, prawy_dolny_y, lewy_gorny_x, lewy_gory_y, prawy_gorny_x, prawy_gorny_y;
+			lewy_dolny_x = wylosowana_x;
+			lewy_dolny_y = wylosowana_y;
+			prawy_dolny_x = wylosowana_x + element.get_a();
+			prawy_dolny_y = wylosowana_y;
+			lewy_gorny_x = wylosowana_x;
+			lewy_gory_y = wylosowana_y + element.get_b();
+			prawy_gorny_x = wylosowana_x + element.get_a();
+			prawy_gorny_y = wylosowana_y + element.get_b();
+
+			if (((lewy_dolny_x > obszar_min_x_juz_zarezerowany) && (lewy_dolny_x < obszar_max_x_juz_zarezerowany)) && ((lewy_dolny_y > obszar_min_y_juz_zarezerowany) && (lewy_dolny_y < obszar_max_y_juz_zarezerowany)))
+			{
+				sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+				czy_byla_kolizja = true;
+				break;
+			}
+
+
+			if (((prawy_dolny_x > obszar_min_x_juz_zarezerowany) && (prawy_dolny_x < obszar_max_x_juz_zarezerowany)) && ((prawy_dolny_y > obszar_min_y_juz_zarezerowany) && (prawy_dolny_y < obszar_max_y_juz_zarezerowany)))
+			{
+				sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+				czy_byla_kolizja = true;
+				break;
+			}
+
+			if (((lewy_gorny_x > obszar_min_x_juz_zarezerowany) && (lewy_gorny_x < obszar_max_x_juz_zarezerowany)) && ((lewy_gory_y > obszar_min_y_juz_zarezerowany) && (lewy_gory_y < obszar_max_y_juz_zarezerowany)))
+			{
+				sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+				czy_byla_kolizja = true;
+				break;
+			}
+			if (((prawy_gorny_x > obszar_min_x_juz_zarezerowany) && (prawy_gorny_x < obszar_max_x_juz_zarezerowany)) && ((prawy_gorny_y > obszar_min_y_juz_zarezerowany) && (prawy_gorny_y < obszar_max_y_juz_zarezerowany)))
+			{
+				sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+				czy_byla_kolizja = true;
+				break;
+			}
+			
+
+		}
+
+		if (czy_byla_kolizja == false)
+		{
+			int obszar_x, obszar_y;
+			obszar_x = element.get_a() + wylosowana_x;
+			obszar_y = element.get_b() + wylosowana_y;
+			if ((obszar_x < 10) && (obszar_y < 10)) // ewentualne sprawdzenie czy jest blad i stsatek wsyatje z planszy
+			{
+				element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+				flota_ustawiona.push_back(element);
+			}
+			else
+			{
+				std::cout << "Statek z id=[ " << element.get_id() << " ] wystaje z planszy, wartosc X to: (" << wylosowana_x << "," << obszar_x << ")" << "; wartosc Y to: (" << wylosowana_y << "," << obszar_y << ")" << std::endl << std::endl;
+				std::cout << "Losuje nowe dane" << std::endl << std::endl;
+				sprawdz_i_wstaw_gracz(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+			}
+		}
+		czy_byla_kolizja = false; //reset do wartoscii pcozatkowej w przypadku gdy wykryto kolzije(aby nie dodac do vektora dodatkowo
+
+	}
+
+
+}
 void cScena::sprawdz_i_wstaw(cProstokat element, int licznik, int& liczba_obroconych,int max_liczba_obronych_elementow) {
 	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
 	int liczba_obroconych_elementow = liczba_obroconych;
@@ -336,7 +485,15 @@ void cScena::display() {
 		glPopMatrix();
 
 	}
-
+	if (czy_wyswietlac_juz_statki_gracza_ == true)
+	{
+		glPushMatrix();
+		{
+			for (auto& el : flota_ustawiona)
+				el.rysuj();
+		}
+		glPopMatrix();
+	}
 	glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
 }
 
@@ -443,7 +600,18 @@ void cScena::mouse(int button, int state, int x, int y) {
 				}
 				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
-					ustaw_statki_gracza_losowo();
+					if (czy_statki_gracza_sa_ustawione_ == true)
+					{
+						wyczysc_dane_ustawionej_floty();
+						ustaw_statki_gracza_losowo();
+					}
+					if (czy_statki_gracza_sa_ustawione_ == false)
+					{
+						ustaw_statki_gracza_losowo();
+						czy_wyswietlac_juz_statki_gracza_ = true;
+						czy_statki_gracza_sa_ustawione_ = true;
+					}
+
 				}
 				if (el.get_typ() == 1)
 				{
