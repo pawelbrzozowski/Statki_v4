@@ -10,7 +10,7 @@
 #define WIELKOSC_OKNA_X 1102
 #define WIELKOSC_OKNA_Y 380
 cSiatka siatka_1,siatka_2;
-cScena::cScena(int ostuzid, bool mozna_obr): ostanio_uzyte_id_(ostuzid) , mozna_obrocic_(mozna_obr){
+cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek): ostanio_uzyte_id_(ostuzid) , mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek){
 	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1,1);
 	flota.push_back(cztermasztowiec);
 
@@ -202,6 +202,7 @@ void cScena::mouse(int button, int state, int x, int y) {
 			{
 				el.dane();
 				set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
+				set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
 				if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
 				{
 					el.obroc();
@@ -245,9 +246,12 @@ void cScena::mouse_move(int x, int y) {
 	double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
 	for (auto& el : flota)
 	{
-		if (el.isClicked(openglX, openglY))//sprawdzic czy dany el jest akywny
+		if (el.isClicked(openglX, openglY)) //sprawdzic czy dany el jest akywny
 		{
-			el.podazaj_za_myszka(openglX, openglY);
+			if (el.get_id() == get_aktualnie_przesuwany_statek())
+			{
+				el.podazaj_za_myszka(openglX, openglY);
+			}
 		}
 	}	
 }
@@ -263,4 +267,10 @@ void cScena::set_mozna_obrocic_statek(int wartosc) {
 }
 bool cScena::get_mozna_obrocic_statek() {
 	return mozna_obrocic_;
+}
+void cScena::set_aktualnie_przesuwany_statek(int wartosc) {
+	aktualnie_przersuwany_statek_ = wartosc;
+}
+int cScena::get_aktualnie_przesuwany_statek() {
+	return aktualnie_przersuwany_statek_;
 }

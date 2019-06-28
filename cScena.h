@@ -25,10 +25,11 @@ class cScena {
 	std::vector<cProstokat> flota_przeciwnika;
 	std::vector<cPrzycisk> przyciski;
 	int ostanio_uzyte_id_;
+	int aktualnie_przersuwany_statek_;
 	bool mozna_obrocic_;
 
 public:
-    cScena(int ostuzid=0, bool mozna_obr= false);
+    cScena(int ostuzid=0, bool mozna_obr= false, int aktualnieprzesuwstatek = 0);
 	void idle();
 	void ustaw_statki_przeciwnika_losowo();
     void resize(int width, int height);
@@ -42,6 +43,8 @@ public:
 	int get_ostanio_uzyte_id_statku();
 	void set_mozna_obrocic_statek(int wartosc);
 	bool get_mozna_obrocic_statek();
+	void set_aktualnie_przesuwany_statek(int wartosc);
+	int get_aktualnie_przesuwany_statek();
 };
 
 
