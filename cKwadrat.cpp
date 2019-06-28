@@ -2,7 +2,7 @@
 #include <GL/freeglut.h>
 #include "cKwadrat.h"
 
-cKwarat::cKwarat(int x1, int y1, bool czy_zajety, int id, int typ_startku, bool czy_trafiony, double red, double green , double blue ) : x_(x1), y_(y1), czy_kwarat_jest_zajety_(czy_zajety), id_(id), typ_statku_(typ_startku),czy_trafiony_(czy_trafiony),red_(red),green_(green),blue_(blue){
+cKwarat::cKwarat(int x1, int y1, bool czy_zajety, int id, int typ_startku, bool czy_trafiony, double red, double green , double blue , bool czy_w_niego_strzelono) : x_(x1), y_(y1), czy_kwarat_jest_zajety_(czy_zajety), id_(id), typ_statku_(typ_startku),czy_trafiony_(czy_trafiony),red_(red),green_(green),blue_(blue),czy_w_niego_stzrelono_(czy_w_niego_strzelono){
 
 }
 void cKwarat::set_czy_kwarat_jest_zajety(bool wartosc) {
@@ -43,6 +43,16 @@ void cKwarat::rysuj() {
 		glColor3d(red_, green_, blue_);
 		glRectd(x_, y_, x_ + 1.0, y_ + 1.0);
 	}
+	if (get_czy_w_niego_strzelono()==true)
+	{
+		glColor3d(0, 0, 0);
+		glRectd(x_, y_, x_ + 1.0, y_ + 1.0);
+	}
+	if (get_czy_trafiony() == true)
+	{
+		glColor3d(0.7, 0.3, 0.5);
+		glRectd(x_, y_, x_ + 1.0, y_ + 1.0);
+	}
 	else
 	{
 	glColor3d(1.0, 1.0, 1.0);
@@ -58,4 +68,10 @@ void cKwarat::set_kolor(double red, double green, double blue) {
 	red_ = red;
 	green_ = green;
 	blue_ = blue;
+}
+void cKwarat::set_czy_w_niego_strzelono(bool wartosc) {
+	czy_w_niego_stzrelono_ = wartosc;
+}
+bool cKwarat::get_czy_w_niego_strzelono() {
+	return czy_w_niego_stzrelono_;
 }

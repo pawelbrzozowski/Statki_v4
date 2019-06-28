@@ -24,25 +24,12 @@ void mouse_binding(int button, int state, int x, int y);
 void mouse_move_binding(int x, int y);
 
 class cScena {
-	/*std::vector<cProstokat> scena_flota_ustawiona;
-	std::vector<cProstokat> scena_flota;
-	std::vector<cProstokat> scena_flota_przeciwnika;
-	std::vector<cProstokat> scena_flota_przeciwnika_ustawiona_losowo;
-	std::vector<cPrzycisk> scena_przyciski;
-	std::vector<cStrzal> scena_pociski_gracza;
-	std::vector<cStrzal> scena_pociski_przeciwnika;
-	std::vector<cKwarat> scena_kwadrat_flota_gracza;
-	std::vector<cKwarat> scena_kwadrat_flota_przeciwnika;*/
-
-	int ostanio_uzyte_id_, liczba_losowych_rozstawien=0;
-	int aktualnie_przersuwany_statek_;
-	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_,czy_statki_gracza_sa_ustawione_,czy_wyswietlac_juz_statki_gracza_;
-
-	bool czy_ustawiono_statki_gracza_losowo_ = false;
-	bool czy_ustawiono_statki_gracza_recznie_ = false;
-
+	std::vector<cPrzycisk> przyciski;
+	bool czy_juz_wyswietlac_kwadraty = false;
+	int liczba_zyc_gracza = 20;
+	int liczba_zyc_przeciwnika = 20;
 public:
-	cScena(int ostuzid = 0, bool mozna_obr = false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false, bool czy_statki_gracza_losowo=false, bool czy_wyswietlac_juz_statki_gracza=false);
+	cScena();
 	void idle();
 
 	void resize(int width, int height);
@@ -52,7 +39,6 @@ public:
 	void set_callbacks();
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
-
 };
 
 

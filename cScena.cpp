@@ -10,7 +10,7 @@
 #define WIELKOSC_OKNA_X 1102
 #define WIELKOSC_OKNA_Y 380
 cSiatka siatka_1, siatka_2;
-cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu, bool czy_statki_gracza_losowo, bool czy_wyswietlac_juz_statki_gracza) : ostanio_uzyte_id_(ostuzid), mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu),czy_statki_gracza_sa_ustawione_(czy_statki_gracza_losowo),czy_wyswietlac_juz_statki_gracza_(czy_wyswietlac_juz_statki_gracza){
+cScena::cScena(  ){
 	
 }
 void cScena::resize(int width, int height) {
@@ -35,8 +35,8 @@ void cScena::idle() {
 void cScena::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//czysci buffer i ustawia kolor z glClearColor
 	
-	siatka_1.rysuj_siatke(); //argument true jest to siatka gracza
-	siatka_2.rysuj_siatke();
+	siatka_1.rysuj_siatke(czy_juz_wyswietlac_kwadraty); //argument true jest to siatka gracza
+	siatka_2.rysuj_siatke(czy_juz_wyswietlac_kwadraty);
 
 	glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
 }
@@ -84,15 +84,10 @@ void cScena::mouse(int button, int state, int x, int y) {
 	{
 		double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
 		double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
-		siatka_1.metoda_mouse_right_button_down(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
-		siatka_1.gra(openglX, openglY);
+		siatka_1.metoda_mouse_right_button_down(openglX, openglY, czy_juz_wyswietlac_kwadraty);
+		std::cout << "wartosc bool: " << czy_juz_wyswietlac_kwadraty << std::endl;
+		siatka_1.liczba_zyc(liczba_zyc_gracza,liczba_zyc_przeciwnika);
+		//siatka_1.zaktualizuj_liczbe_zyc();
 	}
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) 
 	{

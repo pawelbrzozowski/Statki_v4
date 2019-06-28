@@ -6,6 +6,7 @@
 #define FREEGLUT_CPROSTOKAT_H
 #include <GL/freeglut.h>
 #include <GL/glut.h>
+
 class cProstokat {
 double a_, b_, x_, y_;
 int typ_;

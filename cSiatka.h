@@ -26,15 +26,15 @@ class cSiatka {
 
 	bool czy_ustawiono_statki_gracza_losowo_ = false;
 	bool czy_ustawiono_statki_gracza_recznie_ = false;
-	int liczba_zyc_gracza_ = 3, liczba_zyc_przeciwnika_ = 3;
-	int kogo_ruch_ = 0; //0 dla gracza, 1 dla przeciwnika
-	int poprzedni_ruch_=2; //2 czy ruch ani jednej ani 2 strony, wartosc domyslna
-	int numer_ruchu_ = 1;
+
+	bool wykonano_strzal = false;
+
+	int liczbazycgracza = 20, liczbazycprzeciwnika = 20;
 public:
 	friend class cScena;
 	cSiatka(int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0, int id_siatki = 0, int ostatnio_uzyte_id = 0, bool czymoznawyswietlicmenustrzal = false, bool czy_wyswielic_juz_statki_gracza=false,double czy_mozna_obrcic_statek = false,bool czy_statki_gracza_sa_ustawione = false,bool siatka_gracza = false, bool czy_ustawiono_liczbe_zyc = false);
 	void zainicjuj_siatke(int x1, int y1, int x2, int y2, int id_siatki, bool siatka_gracza);
-	void rysuj_siatke();
+	void rysuj_siatke(bool czy_juz_wyswietlac_kwadraty);
 	void kwadracik(int x, int y);
 	//setters&getters
 	void set_czy_mozna_wyswietlic_menu_strzalow(bool wartosc);
@@ -47,6 +47,8 @@ public:
 	int get_aktualnie_przesuwany_statek();
 	void set_mozna_obrocic_statek(int wartosc);
 	bool get_mozna_obrocic_statek();
+	bool get_czy_wykonano_strzal();
+	void set_czy_wykonano_strzal(bool wartosc);
 
 	void uzupelnij_vektor_pol();
 	void zainicjuj_vektory_pol();
@@ -63,11 +65,15 @@ public:
 	void sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc();
 
 
-	void metoda_mouse_right_button_down(double openglX, double openglY);
+	void metoda_mouse_right_button_down(double openglX, double openglY, bool& czy_juz_wyswietlac_kwadraty);
 	void metoda_mouse_right_button_up(double openglX, double openglY);
 	void metoda_mouse_move(double openglX, double openglY);
+	void sprawdz_czy_nie_ma_bledu();
 
-	void gra(double openglX, double openglY);
-	void ustaw_liczbe_zyc();
-	void sprawdz_kogo_ruch();
+	void liczba_zyc(int& liczba_zyc_gracza, int& liczba_zyc_przeciwnika);
+
+	void wykonaj_strzal();
+
+	
+
 };
