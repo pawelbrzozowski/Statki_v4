@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string>
 using namespace std;
-cProstokat::cProstokat(double poz_x, double poz_y, int typ_statku, int id, double a, double b, double red , double blue , double green, bool czy_obrocno) : a_(a), b_(b), red_(red), green_(green), blue_(blue),x_(poz_x),y_(poz_y), typ_(typ_statku), id_(id),czy_obrocono_statek_(czy_obrocno){
+cProstokat::cProstokat(double poz_x, double poz_y, int typ_statku, int id, double a, double b, double red , double blue , double green, bool czy_obrocno2) : a_(a), b_(b), red_(red), green_(green), blue_(blue),x_(poz_x),y_(poz_y), typ_(typ_statku), id_(id),juz_raz_mnie_obrocono_(czy_obrocno2){
 }
 void cProstokat::przesun(double dx, double dy) {
 	x_ += dx;
@@ -21,10 +21,10 @@ void cProstokat::dane() {
 	std::cout << "Klinieto na statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "masztowiec " << "ID STATKU ---> " << id_ << endl;
 }
 void cProstokat::dane_rozlozenia_losowego() {
-	if(czy_obrocono_statek_==true)
-		std::cout << "UMIESZCZONO statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "-masztowiec " <<", statek ten     ZOSTAL OBROCONY,   ID STATKU ---> " <<"["<< id_<<"]" << endl << endl;
-	if (czy_obrocono_statek_ == false)
-		std::cout << "UMIESZCZONO statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "-masztowiec " << ", statek ten nie zostal obrocony,   ID STATKU ---> " << "[" << id_ << "]" << endl << endl;
+	if(juz_raz_mnie_obrocono_==true)
+		std::cout << "UMIESZCZONO statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "-masztowiec " <<", statek ten     zostal obrocony,   ID STATKU ---> " <<"["<< id_<<"]" << endl << endl;
+	if (juz_raz_mnie_obrocono_ == false)
+		std::cout << "UMIESZCZONO statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "-masztowiec " << ", statek ten NIE zostal obrocony,   ID STATKU ---> " << "[" << id_ << "]" << endl << endl;
 }
 void cProstokat::set_kolor(float r, float g, float b) {
 	red_ = r;
@@ -85,6 +85,9 @@ void cProstokat::set_wartoscx_oraz_y(int wartosc_x, int wartosc_y) {
 	x_ = wartosc_x;
 	y_ = wartosc_y;
 }
-void cProstokat::set_czy_obrocono(bool wartosc) {
-	czy_obrocono_statek_ = wartosc;
+void cProstokat::set_juz_mnie_obracano(bool wartosc) {
+	juz_raz_mnie_obrocono_ = wartosc;
+}
+bool cProstokat::get_juz_mnie_obracano() {
+	return juz_raz_mnie_obrocono_;
 }

@@ -9,77 +9,80 @@
 #define WYSOKOSC_GL 10
 #define WIELKOSC_OKNA_X 1102
 #define WIELKOSC_OKNA_Y 380
-cSiatka siatka_1,siatka_2;
-cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu): ostanio_uzyte_id_(ostuzid) , mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu){
-	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1,1);
+cSiatka siatka_1, siatka_2;
+cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czywyswtlmenu) : ostanio_uzyte_id_(ostuzid), mozna_obrocic_(mozna_obr), aktualnie_przersuwany_statek_(aktualnieprzesuwstatek), czy_wyswietlac_menu_strzalow_(czywyswtlmenu) {
+	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1, 1);
 	flota.push_back(cztermasztowiec);
 
-	cProstokat trojmasztowiec_1(12, 7, 3,2, 3,1,2);
+	cProstokat trojmasztowiec_1(12, 7, 3, 2, 3, 1, 2);
 	flota.push_back(trojmasztowiec_1);
 
-	cProstokat trojmasztowiec_2(16, 7, 3,3, 3, 1,3);
+	cProstokat trojmasztowiec_2(16, 7, 3, 3, 3, 1, 3);
 	flota.push_back(trojmasztowiec_2);
 
-	cProstokat dwumasztowiec_1(11, 5, 2,4, 2, 1,4);
+	cProstokat dwumasztowiec_1(11, 5, 2, 4, 2, 1, 4);
 	flota.push_back(dwumasztowiec_1);
 
-	cProstokat dwumasztowiec_2(14, 5, 2,5, 2, 1,5);
+	cProstokat dwumasztowiec_2(14, 5, 2, 5, 2, 1, 5);
 	flota.push_back(dwumasztowiec_2);
 
-	cProstokat dwumasztowiec_3(17, 5, 2,6, 2, 1,6);
+	cProstokat dwumasztowiec_3(17, 5, 2, 6, 2, 1, 6);
 	flota.push_back(dwumasztowiec_3);
 
-	cProstokat jednomasztowiec_1(12, 3, 1,7 ,1,1,7);
+	cProstokat jednomasztowiec_1(12, 3, 1, 7, 1, 1, 7);
 	flota.push_back(jednomasztowiec_1);
 
-	cProstokat jednomasztowiec_2(14, 3, 1,8,1, 1,8);
+	cProstokat jednomasztowiec_2(14, 3, 1, 8, 1, 1, 8);
 	flota.push_back(jednomasztowiec_2);
 
-	cProstokat jednomasztowiec_3(16, 3, 1,9, 1, 1,9);
+	cProstokat jednomasztowiec_3(16, 3, 1, 9, 1, 1, 9);
 	flota.push_back(jednomasztowiec_3);
 
-	cProstokat jednomasztowiec_4(18, 3, 1,10, 1, 1, 10);
+	cProstokat jednomasztowiec_4(18, 3, 1, 10, 1, 1, 10);
 	flota.push_back(jednomasztowiec_4);
 
-	 ////// GENEROWANIE FLOTY PRZECIWNIKA ////////
+	////// GENEROWANIE FLOTY PRZECIWNIKA ////////
 
-	cProstokat cztermasztowiec_przeciwnika(250, 9, 4,1, 4, 1, 1);
+	cProstokat cztermasztowiec_przeciwnika(250, 9, 4, 1, 4, 1, 1);
 	flota_przeciwnika.push_back(cztermasztowiec_przeciwnika);
 
-	cProstokat trojmasztowiec_1_przeciwnika(210, 7, 3,2, 3, 1, 2);
+	cProstokat trojmasztowiec_1_przeciwnika(210, 7, 3, 2, 3, 1, 2);
 	flota_przeciwnika.push_back(trojmasztowiec_1_przeciwnika);
 
-	cProstokat trojmasztowiec_2_przeciwnika(260, 7, 3,3, 3, 1, 3);
+	cProstokat trojmasztowiec_2_przeciwnika(260, 7, 3, 3, 3, 1, 3);
 	flota_przeciwnika.push_back(trojmasztowiec_2_przeciwnika);
 
-	cProstokat dwumasztowiec_1_przeciwnika(210, 5, 2,4, 2, 1, 4);
+	cProstokat dwumasztowiec_1_przeciwnika(210, 5, 2, 4, 2, 1, 4);
 	flota_przeciwnika.push_back(dwumasztowiec_1_przeciwnika);
 
-	cProstokat dwumasztowiec_2_przeciwnika(240, 5, 2,5, 2, 1, 5);
+	cProstokat dwumasztowiec_2_przeciwnika(240, 5, 2, 5, 2, 1, 5);
 	flota_przeciwnika.push_back(dwumasztowiec_2_przeciwnika);
 
-	cProstokat dwumasztowiec_3_przeciwnika(270, 5, 2,6, 2, 1, 6);
+	cProstokat dwumasztowiec_3_przeciwnika(270, 5, 2, 6, 2, 1, 6);
 	flota_przeciwnika.push_back(dwumasztowiec_3_przeciwnika);
 
-	cProstokat jednomasztowiec_1_przeciwnika(220, 3, 1,7, 1, 1, 7);
+	cProstokat jednomasztowiec_1_przeciwnika(220, 3, 1, 7, 1, 1, 7);
 	flota_przeciwnika.push_back(jednomasztowiec_1_przeciwnika);
 
-	cProstokat jednomasztowiec_2_przeciwnika(240, 3, 1,8, 1, 1, 8);
+	cProstokat jednomasztowiec_2_przeciwnika(240, 3, 1, 8, 1, 1, 8);
 	flota_przeciwnika.push_back(jednomasztowiec_2_przeciwnika);
 
-	cProstokat jednomasztowiec_3_przeciwnika(260, 3, 1,9, 1, 1, 9);
+	cProstokat jednomasztowiec_3_przeciwnika(260, 3, 1, 9, 1, 1, 9);
 	flota_przeciwnika.push_back(jednomasztowiec_3_przeciwnika);
 
-	cProstokat jednomasztowiec_4_przeciwnika(280, 3, 1,10, 1, 1, 10);
+	cProstokat jednomasztowiec_4_przeciwnika(280, 3, 1, 10, 1, 1, 10);
 	flota_przeciwnika.push_back(jednomasztowiec_4_przeciwnika);
 
 	ustaw_statki_przeciwnika_losowo();
 
 	//DODAJEMY PRZYCYSKI
-	cPrzycisk przyczik_obroc(10.5, 0.5, 1, 1, 1, 0.7, 0.7,0);
+	cPrzycisk przyczik_obroc(10.5, 0.5, 1, 1, 1, 0.7, 0.7, 0);
 	przyciski.push_back(przyczik_obroc);
 
-	cPrzycisk przycisk_dalej(14, 0.5, 2, 2,1,0.7,0.7,0);
+	cPrzycisk przycisk_losowo(14, 0.5, 2, 2, 1, 0.7, 0.7, 0);
+	przyciski.push_back(przycisk_losowo);
+
+	cPrzycisk przycisk_dalej(16.5, 0.5, 3, 2, 1, 0.7, 0.7, 0);
 	przyciski.push_back(przycisk_dalej);
 
 	//DODAJEMY STRZALY
@@ -92,7 +95,7 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 	cStrzal torpeda(11, 4.5, 3, 2, false);
 	pociski.push_back(torpeda);
 
-	cStrzal zwykly_strzal(11, 3,4, 1000, true);
+	cStrzal zwykly_strzal(11, 3, 4, 1000, true);
 	pociski.push_back(zwykly_strzal);
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
@@ -100,31 +103,53 @@ void cScena::ustaw_statki_przeciwnika_losowo() {
 	srand(time(NULL));
 	for (auto& el : flota_przeciwnika) {
 		licznik++;
-		sprawdz_i_wstaw(el, licznik++);
+		sprawdz_i_wstaw(el, licznik,18,0,28,10,2);
 	}
 	for (auto& el : flota_przeciwnika_ustawiona_losowo) {
 		el.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statki zostal umieszonczy 
 	}
 
 }
-void cScena::sprawdz_i_wstaw(cProstokat element, int licznik) {
-	
+void cScena::ustaw_statki_gracza_losowo() {
+	int licznik = 1;
+	srand(time(NULL));
+	for (auto& el : flota) {
+		licznik++;
+		sprawdz_i_wstaw(el, licznik, 0, 0, 10, 10, 1);
+	}
+	for (auto& el : flota_przeciwnika_ustawiona_losowo) {
+		el.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statki zostal umieszonczy 
+	}
+}
+void cScena::sprawdz_i_wstaw(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik) {
+	// zakres los x = 18
+	// zakres los x = 0
+	//zakres los maxx = 28
+	//zakres los maxy = 10
+	// gracz_czy_przeciwnik = 2
 	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
-	double wylosowana_x = (std::rand() % 10) + 18;
-	double wylosowana_y = (std::rand() % 10) + 0;
+	double wylosowana_x = (std::rand() % 10) + zakres_los_x;
+	double wylosowana_y = (std::rand() % 10) + zakres_los_y;
 	int czy_obrocic = (std::rand() % 10);
 	bool czy_byla_kolizja = false;
-	
-	if (wylosowana_x < 19)
-		wylosowana_x = 19;
-	if (czy_obrocic>=5) //tutaj poprostu odwracamy element i dopiero ptoem martwimy sie gdzie go wstawic
+	if (gracz_czy_przeciwnik == 2)
+	{
+		if (wylosowana_x < 19)
+			wylosowana_x = 19;
+	}
+	if (gracz_czy_przeciwnik == 1)
+	{
+		if (wylosowana_x == 10)
+			wylosowana_x = 9;
+	}
+	if (czy_obrocic >= 5) //tutaj poprostu odwracamy element i dopiero ptoem martwimy sie gdzie go wstawic
 	{
 		std::cout << "Sprawdzam czy statek z id=[ " << element.get_id() << " ] mozna obrocic" << std::endl;
-		if ((element.get_x() + element.get_b() < 28) && (element.get_y() + element.get_a() < 10))
+		if ((element.get_x() + element.get_b() < zakres_los_x_max) && (element.get_y() + element.get_a() < zakres_los_y_max))
 		{
 			element.obroc();
-			element.set_czy_obrocono(true);
-			std::cout << "pomyslnie obrocono statek z id = [" << element.get_id()<<" ]" << std::endl;
+			element.set_juz_mnie_obracano(true);
+			std::cout << "pomyslnie obrocono statek z id = [" << element.get_id() << " ]" << std::endl;
 		}
 		else
 		{
@@ -134,83 +159,117 @@ void cScena::sprawdz_i_wstaw(cProstokat element, int licznik) {
 			std::cout << "blad w obracniu statku z id = [" << element.get_id() << " ]" << std::endl;
 			std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl;
 			int ile_odjac_w_x, ile_odjac_w_y;
-			if (element.get_x() + element.get_b() < 28)
+			if (element.get_x() + element.get_b() < zakres_los_x_max)
 			{
-				ile_odjac_w_x = obszar_x_2 - 28;
+				ile_odjac_w_x = obszar_x_2 - zakres_los_x_max;
 				wylosowana_x = wylosowana_x - ile_odjac_w_x;
 			}
-			if (element.get_y() + element.get_a() < 10)
+			if (element.get_y() + element.get_a() < zakres_los_x_max)
 			{
-				ile_odjac_w_y = obszar_y_2 - 10;
+				ile_odjac_w_y = obszar_y_2 - zakres_los_y_max;
 				wylosowana_y = wylosowana_y - ile_odjac_w_y;
 			}
 			element.obroc();
-			element.set_czy_obrocono(true);
+			element.set_juz_mnie_obracano(true);
 			std::cout << "Przesunieto statek z id=[" << element.get_id() << "], jego obszar wynosi teraz: X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl;
 		}
-			
+
 	}
 	if (licznik == 1)
 	{
 		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
-		flota_przeciwnika_ustawiona_losowo.push_back(element);
+		if (gracz_czy_przeciwnik == 2)
+		{
+			flota_przeciwnika_ustawiona_losowo.push_back(element);
+		}
+		if (gracz_czy_przeciwnik == 1)
+		{
+			flota_ustawiona.push_back(element);
+		}
 	}
 	if (licznik > 1)
 	{
-
-		for (auto& el : flota_przeciwnika_ustawiona_losowo)
+		if (gracz_czy_przeciwnik == 2)
 		{
-			if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
+			for (auto& el : flota_przeciwnika_ustawiona_losowo)
 			{
-				int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
-				obszar_x = el.get_x() + el.get_a();
-				obszar_y = el.get_y() + el.get_b();
-				obszar_x_2 = wylosowana_x + element.get_a();
-				obszar_y_2 = wylosowana_y + element.get_b();
-				std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
-				std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
-				std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
-				std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" <<el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " <<obszar_y << ")" << std::endl << std::endl;
-				std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
-				std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
-				std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
-				sprawdz_i_wstaw(element, licznik_do_ewentualnego_wywolania_jeszcze_raz);
-				czy_byla_kolizja = true;
-				break;
+				if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
+				{
+					int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
+					obszar_x = el.get_x() + el.get_a();
+					obszar_y = el.get_y() + el.get_b();
+					obszar_x_2 = wylosowana_x + element.get_a();
+					obszar_y_2 = wylosowana_y + element.get_b();
+					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
+					std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
+					std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
+					std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" << el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " << obszar_y << ")" << std::endl << std::endl;
+					std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
+					std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
+					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
+					sprawdz_i_wstaw(element, licznik, zakres_los_x, zakres_los_y, zakres_los_x_max, zakres_los_y_max, gracz_czy_przeciwnik);
+					czy_byla_kolizja = true;
+					break;
+				}
 			}
 		}
+		if (gracz_czy_przeciwnik == 1)
+		{
+			for (auto& el : flota_ustawiona)
+			{
+				if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
+				{
+					int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
+					obszar_x = el.get_x() + el.get_a();
+					obszar_y = el.get_y() + el.get_b();
+					obszar_x_2 = wylosowana_x + element.get_a();
+					obszar_y_2 = wylosowana_y + element.get_b();
+					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
+					std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
+					std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
+					std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" << el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " << obszar_y << ")" << std::endl << std::endl;
+					std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
+					std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
+					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
+					sprawdz_i_wstaw( element, licznik,  zakres_los_x, zakres_los_y,  zakres_los_x_max, zakres_los_y_max, gracz_czy_przeciwnik);
+					czy_byla_kolizja = true;
+					break;
+				}
+			};
+		}
+		
 		if (czy_byla_kolizja == false)
 		{
 			element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
 			flota_przeciwnika_ustawiona_losowo.push_back(element);
 		}
 		czy_byla_kolizja = false; //reset do wartoscii pcozatkowej w rpzydapku gdy wykryto kolzije(aby nie dodac do vektora dodatkowo
-		
+
 	}
-	
+
 
 }
 void cScena::resize(int width, int height) {
-   
-    glViewport(0, 0, (GLsizei)width, (GLsizei)height); //ustawai vievport,lewy grony punkt i olegly o wysokosc i szerokosc prawy dolny
 
-    glMatrixMode(GL_PROJECTION); //mozemy dzieki temu usatwic glortho
-    glLoadIdentity(); //upewnia sie ze nie ma zmian w matrxie i ze wsyztsko jets ustaloneod pcoztaku tak
-	glOrtho(0.0, DLUGOSC_GL,0.0, WYSOKOSC_GL,-1.0,1.0);
+	glViewport(0, 0, (GLsizei)width, (GLsizei)height); //ustawai vievport,lewy grony punkt i olegly o wysokosc i szerokosc prawy dolny
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glMatrixMode(GL_PROJECTION); //mozemy dzieki temu usatwic glortho
+	glLoadIdentity(); //upewnia sie ze nie ma zmian w matrxie i ze wsyztsko jets ustaloneod pcoztaku tak
+	glOrtho(0.0, DLUGOSC_GL, 0.0, WYSOKOSC_GL, -1.0, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void cScena::idle() {
 	for (auto& el : flota)
 		el.rysuj();
-    glutPostRedisplay();
-	
+	glutPostRedisplay();
+
 }
 
 void cScena::display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//czysci buffer i ustawia kolor z glClearColor
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//czysci buffer i ustawia kolor z glClearColor
 	siatka_1.rysuj_siatke();
 	siatka_2.rysuj_siatke();
 	glPushMatrix();
@@ -219,7 +278,7 @@ void cScena::display() {
 		{
 			el.rysuj();
 		}
-			
+
 	}
 	glPushMatrix();
 	{
@@ -234,7 +293,7 @@ void cScena::display() {
 	}
 	glPopMatrix();
 
-	if(get_czy_mozna_wyswietlic_menu_strzalow()==true)
+	if (get_czy_mozna_wyswietlic_menu_strzalow() == true)
 	{
 		glPushMatrix();
 		{
@@ -242,52 +301,52 @@ void cScena::display() {
 				el.rysuj();
 		}
 		glPopMatrix();
-		
+
 	}
 
-    glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
+	glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
 }
 
 
 
 void cScena::set_callbacks() {
-    glutReshapeFunc(resize_binding);
-    glutDisplayFunc(display_binding);
-    glutIdleFunc(idle_binding);
+	glutReshapeFunc(resize_binding);
+	glutDisplayFunc(display_binding);
+	glutIdleFunc(idle_binding);
 	glutMouseFunc(mouse_binding);
 	glutMotionFunc(mouse_move_binding);
 	glutSpecialFunc(keyboard_bingidng);
 }
 
-void cScena::init(int argc, char **argv, const char *window_name) {
+void cScena::init(int argc, char** argv, const char* window_name) {
 
-    glutInit(&argc, argv);
-    glutInitWindowSize(WIELKOSC_OKNA_X, WIELKOSC_OKNA_Y);
-    glutInitWindowPosition(40, 40);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
+	glutInit(&argc, argv);
+	glutInitWindowSize(WIELKOSC_OKNA_X, WIELKOSC_OKNA_Y);
+	glutInitWindowPosition(40, 40);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
 
-    glutCreateWindow(window_name);
+	glutCreateWindow(window_name);
 
-    // set white as the clear colour
-    glClearColor(0.8, 0.8, 0.8, 1);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+	// set white as the clear colour
+	glClearColor(0.8, 0.8, 0.8, 1);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);
 
-    set_callbacks();
-	siatka_1.zainicjuj_siatke(0, 0, 10, 10,0); //inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
-	siatka_2.zainicjuj_siatke(19, 0, 29, 10,100);//inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
-    glutMainLoop();
+	set_callbacks();
+	siatka_1.zainicjuj_siatke(0, 0, 10, 10, 0); //inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
+	siatka_2.zainicjuj_siatke(19, 0, 29, 10, 100);//inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
+	glutMainLoop();
 }
-void cScena::key(int key){
-	
+void cScena::key(int key) {
+
 }
 void cScena::mouse(int button, int state, int x, int y) {
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		double openglX = (((double)DLUGOSC_GL)/ ((double)WIELKOSC_OKNA_X)) * ((double)x);
+		double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
 		double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
 		for (auto& el : flota)
 		{
@@ -310,32 +369,32 @@ void cScena::mouse(int button, int state, int x, int y) {
 					}
 				}
 			}
-			
+
 		}
 
-							for (auto& el : flota_przeciwnika_ustawiona_losowo)
-							{
-								if (el.isClicked(openglX, openglY))
-								{
-									el.dane();
-									set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
-									set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
-									if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
-									{
-										el.obroc();
-										set_ostanio_uzyte_id_statku(0);
-										set_mozna_obrocic_statek(false);
-										for (auto& el : przyciski)
-										{
-											if (el.get_typ() == 1)
-											{
-												el.dane();
-											}
-										}
-									}
-								}
+		for (auto& el : flota_przeciwnika_ustawiona_losowo)
+		{
+			if (el.isClicked(openglX, openglY))
+			{
+				el.dane();
+				set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
+				set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
+				if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
+				{
+					el.obroc();
+					set_ostanio_uzyte_id_statku(0);
+					set_mozna_obrocic_statek(false);
+					for (auto& el : przyciski)
+					{
+						if (el.get_typ() == 1)
+						{
+							el.dane();
+						}
+					}
+				}
+			}
 
-							}
+		}
 
 
 
@@ -343,11 +402,15 @@ void cScena::mouse(int button, int state, int x, int y) {
 		{
 			if (el.isClicked(openglX, openglY))
 			{
-				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
+				if (el.get_typ() == 3) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
 					std::cout << "KLIKNIETO DALEJ " << std::endl;
 					set_czy_mozna_wyswietlic_menu_strzalow(true);
 					stan_arsenalu();
+				}
+				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
+				{
+					ustaw_statki_gracza_losowo();
 				}
 				if (el.get_typ() == 1)
 				{
@@ -364,9 +427,9 @@ void cScena::mouse(int button, int state, int x, int y) {
 		{
 			el.isUnclicked(openglX, openglY);
 			el.dopasuj_element_na_planszy();
-			
+
 		}
-			
+
 	}
 }
 void cScena::mouse_move(int x, int y) {
@@ -382,11 +445,11 @@ void cScena::mouse_move(int x, int y) {
 			}
 		}
 	}
-	
+
 }
 void cScena::set_ostanio_uzyte_id_statku(int wartosc) {
 	ostanio_uzyte_id_ = wartosc;
-	std::cout << "wd. sceny ostanio klinketo na prosotkat z id [" << get_ostanio_uzyte_id_statku() << "]" <<std::endl;
+	std::cout << "wd. sceny ostanio klinketo na prosotkat z id [" << get_ostanio_uzyte_id_statku() << "]" << std::endl;
 }
 int cScena::get_ostanio_uzyte_id_statku() {
 	return ostanio_uzyte_id_;
@@ -410,7 +473,7 @@ bool cScena::get_czy_mozna_wyswietlic_menu_strzalow() {
 	return czy_wyswietlac_menu_strzalow_;
 }
 void cScena::stan_arsenalu() {
-	std::string a="nalotu", b="bombardowania", c="torped", d="zwyklego ostrzalu";
+	std::string a = "nalotu", b = "bombardowania", c = "torped", d = "zwyklego ostrzalu";
 	int tmp;
 	std::cout << "|------------------------------------------------|" << std::endl;
 	std::cout << "|Pozostalo Ci:                                   |" << std::endl;
@@ -422,7 +485,7 @@ void cScena::stan_arsenalu() {
 		{
 		case 1:
 		{
-			std::cout << "|  ["<<el.get_ilosc_uzyc_pozostala()<<"] uzyc "<< a<<"                               |" << std::endl;
+			std::cout << "|  [" << el.get_ilosc_uzyc_pozostala() << "] uzyc " << a << "                               |" << std::endl;
 		}break;
 		case 2:
 		{

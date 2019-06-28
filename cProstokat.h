@@ -11,9 +11,9 @@ double a_, b_, x_, y_;
 int typ_;
 double red_, green_, blue_;
 int id_;
-bool czy_obrocono_statek_;
+bool czy_obrocono_statek_, juz_raz_mnie_obrocono_;
 public:
-	cProstokat(double poz_x, double poz_y, int typ_statku, int id, double a = 1, double b = 1, double red = 1, double blue = 1, double green = 1, bool czy_obrocno=false);
+	cProstokat(double poz_x, double poz_y, int typ_statku, int id, double a = 1, double b = 1, double red = 1, double blue = 1, double green = 1, bool czy_obrocno2 = false);
 	void rysuj();
 	void set_kolor(float r,float g, float b);
     void przesun(double dx, double dy);
@@ -30,7 +30,8 @@ public:
 	double get_a();
 	double get_b();
 	int get_id();
-	void set_czy_obrocono(bool wartosc);
+	void set_juz_mnie_obracano(bool wartosc);
+	bool get_juz_mnie_obracano();
 };
 
 

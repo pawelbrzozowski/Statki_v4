@@ -22,7 +22,8 @@ void mouse_binding(int button, int state, int x, int y);
 void mouse_move_binding(int x, int y);
 
 class cScena {
-    std::vector<cProstokat> flota;
+	std::vector<cProstokat> flota_ustawiona;
+	std::vector<cProstokat> flota;
 	std::vector<cProstokat> flota_przeciwnika;
 	std::vector<cProstokat> flota_przeciwnika_ustawiona_losowo;
 	std::vector<cPrzycisk> przyciski;
@@ -33,18 +34,19 @@ class cScena {
 	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_;
 
 public:
-    cScena(int ostuzid=0, bool mozna_obr= false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false);
+	cScena(int ostuzid = 0, bool mozna_obr = false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false);
 	void idle();
 	void ustaw_statki_przeciwnika_losowo();
-    void resize(int width, int height);
-    void display();
+	void ustaw_statki_gracza_losowo();
+	void resize(int width, int height);
+	void display();
 	void key(int key);
-    void init(int argc, char *argv[], const char* window_name);
-    void set_callbacks();
+	void init(int argc, char* argv[], const char* window_name);
+	void set_callbacks();
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
 
-	void sprawdz_i_wstaw(cProstokat el,int licznik);
+	void sprawdz_i_wstaw(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik);
 
 	void set_ostanio_uzyte_id_statku(int wartosc);
 	int get_ostanio_uzyte_id_statku();
