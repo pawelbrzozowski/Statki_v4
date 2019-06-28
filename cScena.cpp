@@ -85,6 +85,14 @@ void cScena::mouse(int button, int state, int x, int y) {
 		double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
 		double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
 		siatka_1.metoda_mouse_right_button_down(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
+		siatka_1.gra(openglX, openglY);
 	}
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) 
 	{

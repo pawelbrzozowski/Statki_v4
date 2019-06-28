@@ -22,14 +22,17 @@ class cSiatka {
 
 	int x1_, y1_, x2_, y2_, id_siatki_;
 	int ostanio_uzyte_id_, aktualnie_przesuwany_statek_;
-	bool czy_mozna_wyswietlic_menu_strzalow_, czy_wyswietlac_juz_statki_gracza_,czy_mozna_obrocic_statek_, czy_statki_gracza_sa_ustawione_,siatka_gracza_;
+	bool czy_mozna_wyswietlic_menu_strzalow_, czy_wyswietlac_juz_statki_gracza_,czy_mozna_obrocic_statek_, czy_statki_gracza_sa_ustawione_,siatka_gracza_,czy_ustawiono_liczbe_zyc_;
 
 	bool czy_ustawiono_statki_gracza_losowo_ = false;
 	bool czy_ustawiono_statki_gracza_recznie_ = false;
-
+	int liczba_zyc_gracza_ = 3, liczba_zyc_przeciwnika_ = 3;
+	int kogo_ruch_ = 0; //0 dla gracza, 1 dla przeciwnika
+	int poprzedni_ruch_=2; //2 czy ruch ani jednej ani 2 strony, wartosc domyslna
+	int numer_ruchu_ = 1;
 public:
 	friend class cScena;
-	cSiatka(int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0, int id_siatki = 0, int ostatnio_uzyte_id = 0, bool czymoznawyswietlicmenustrzal = false, bool czy_wyswielic_juz_statki_gracza=false,double czy_mozna_obrcic_statek = false,bool czy_statki_gracza_sa_ustawione = false,bool siatka_gracza = false);
+	cSiatka(int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0, int id_siatki = 0, int ostatnio_uzyte_id = 0, bool czymoznawyswietlicmenustrzal = false, bool czy_wyswielic_juz_statki_gracza=false,double czy_mozna_obrcic_statek = false,bool czy_statki_gracza_sa_ustawione = false,bool siatka_gracza = false, bool czy_ustawiono_liczbe_zyc = false);
 	void zainicjuj_siatke(int x1, int y1, int x2, int y2, int id_siatki, bool siatka_gracza);
 	void rysuj_siatke();
 	void kwadracik(int x, int y);
@@ -63,4 +66,8 @@ public:
 	void metoda_mouse_right_button_down(double openglX, double openglY);
 	void metoda_mouse_right_button_up(double openglX, double openglY);
 	void metoda_mouse_move(double openglX, double openglY);
+
+	void gra(double openglX, double openglY);
+	void ustaw_liczbe_zyc();
+	void sprawdz_kogo_ruch();
 };

@@ -2,7 +2,7 @@
 #include <GL/freeglut.h>
 #include "cSiatka.h"
 
-cSiatka::cSiatka(int x1 , int y1 , int x2 , int y2, int id_siatki, int ostatnio_uzyte_id, bool czymoznawyswietlicmenustrzal, bool czy_wyswielic_juz_statki_gracza, double czy_mozna_obrcic_statek, bool czy_statki_gracza_sa_ustawione, bool siatka_gracza) : x1_(x1), y1_(y1), x2_(x2),y2_(y2), id_siatki_(id_siatki),ostanio_uzyte_id_(ostatnio_uzyte_id), czy_mozna_wyswietlic_menu_strzalow_(czymoznawyswietlicmenustrzal), czy_wyswietlac_juz_statki_gracza_(czy_wyswielic_juz_statki_gracza), czy_mozna_obrocic_statek_(czy_mozna_obrcic_statek), czy_statki_gracza_sa_ustawione_(czy_statki_gracza_sa_ustawione), siatka_gracza_(siatka_gracza) {
+cSiatka::cSiatka(int x1 , int y1 , int x2 , int y2, int id_siatki, int ostatnio_uzyte_id, bool czymoznawyswietlicmenustrzal, bool czy_wyswielic_juz_statki_gracza, double czy_mozna_obrcic_statek, bool czy_statki_gracza_sa_ustawione, bool siatka_gracza, bool czy_ustawiono_liczbe_zyc) : x1_(x1), y1_(y1), x2_(x2),y2_(y2), id_siatki_(id_siatki),ostanio_uzyte_id_(ostatnio_uzyte_id), czy_mozna_wyswietlic_menu_strzalow_(czymoznawyswietlicmenustrzal), czy_wyswietlac_juz_statki_gracza_(czy_wyswielic_juz_statki_gracza), czy_mozna_obrocic_statek_(czy_mozna_obrcic_statek), czy_statki_gracza_sa_ustawione_(czy_statki_gracza_sa_ustawione), siatka_gracza_(siatka_gracza), czy_ustawiono_liczbe_zyc_(czy_ustawiono_liczbe_zyc){
 	cProstokat cztermasztowiec(15, 9, 4, 1, 4, 1, 1);
 	flota.push_back(cztermasztowiec);
 
@@ -139,6 +139,8 @@ void  cSiatka::rysuj_siatke() {
 			{
 				el.rysuj();
 			}
+			/*for (auto& el : kwadrat_flota_przeciwnika)
+				el.rysuj();*/
 			
 				
 		}
@@ -163,15 +165,12 @@ void  cSiatka::rysuj_siatke() {
 					kwadracik(i, j);
 				}
 			}
-		}
-		if (get_czy_mozna_wyswietlic_menu_strzalow() == true)
-		{
-			for (auto& el : kwadrat_flota_przeciwnika)
+			for (auto& el : flota_przeciwnika_ustawiona_losowo)
 				el.rysuj();
 		}
-		if (get_czy_mozna_wyswietlic_menu_strzalow() == false)
+		if (get_czy_mozna_wyswietlic_menu_strzalow() == true) // NIE DZIALA TO
 		{
-			for (auto& el : flota_przeciwnika_ustawiona_losowo)
+			for (auto& el : kwadrat_flota_przeciwnika)
 				el.rysuj();
 		}
 	}
@@ -302,44 +301,49 @@ void cSiatka::metoda_mouse_right_button_down(double openglX, double openglY) {
 
 		}
 	}
-	for (auto& el : przyciski)
-	{
-		if (el.isClicked(openglX, openglY))
+		for (auto& el : przyciski)
 		{
-			if (el.get_typ() == 3) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
+			if ((el.isClicked(openglX, openglY))&&(czy_mozna_wyswietlic_menu_strzalow_ == false))
 			{
-				przekopiuj_ustawione_recznie_statki_do_ostatecznego_vektora();
-				std::cout << "KLIKNIETO DALEJ " << std::endl;
-				uzupelnij_vektor_pol(); //modyfikuje wartosci zajete dla poszczegolnych kwadratow
-				set_czy_mozna_wyswietlic_menu_strzalow(true);
-				stan_arsenalu();
-			}
-			if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
-			{
-				czy_ustawiono_statki_gracza_losowo_ == true;
-				sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc();
-
-				if (czy_statki_gracza_sa_ustawione_ == true)
+				if (el.get_typ() == 3) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
-					wyczysc_dane_ustawionej_floty();
-					ustaw_statki_gracza_losowo();
+					przekopiuj_ustawione_recznie_statki_do_ostatecznego_vektora();
+					std::cout << "KLIKNIETO DALEJ " << std::endl;
+					uzupelnij_vektor_pol(); //modyfikuje wartosci zajete dla poszczegolnych kwadratow
+					set_czy_mozna_wyswietlic_menu_strzalow(true);
+					stan_arsenalu();
 				}
-				if (czy_statki_gracza_sa_ustawione_ == false)
+				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
-					ustaw_statki_gracza_losowo();
-					czy_wyswietlac_juz_statki_gracza_ = true;
-					czy_statki_gracza_sa_ustawione_ = true;
-				}
+					czy_ustawiono_statki_gracza_losowo_ == true;
+					sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc();
 
+					if (czy_statki_gracza_sa_ustawione_ == true)
+					{
+						wyczysc_dane_ustawionej_floty();
+						ustaw_statki_gracza_losowo();
+					}
+					if (czy_statki_gracza_sa_ustawione_ == false)
+					{
+						ustaw_statki_gracza_losowo();
+						czy_wyswietlac_juz_statki_gracza_ = true;
+						czy_statki_gracza_sa_ustawione_ = true;
+					}
+
+				}
+				if (el.get_typ() == 1)
+				{
+					set_mozna_obrocic_statek(true); //ustwaimy parametr sceny mozna_orocic na true
+				}
+				el.dane();
 			}
-			if (el.get_typ() == 1)
+			if ((el.isClicked(openglX, openglY)) && (czy_mozna_wyswietlic_menu_strzalow_ == true)) //wylaczenie mozliwosci ponownego kliniecia przycyskow
 			{
-				set_mozna_obrocic_statek(true); //ustwaimy parametr sceny mozna_orocic na true
+				std::cout << "Niestety ale nie mozna juz kliknac tych przycyskow" << std::endl;
 			}
-			el.dane();
 		}
-	}
-
+	
+	
 
 }
 void cSiatka::metoda_mouse_right_button_up(double openglX, double openglY){
@@ -871,5 +875,60 @@ void cSiatka::metoda_mouse_move(double openglX, double openglY) {
 				el.podazaj_za_myszka(openglX, openglY);
 			}
 		}
+	}
+}
+void cSiatka::ustaw_liczbe_zyc() {
+	if (czy_ustawiono_liczbe_zyc_ == true)
+	{
+		std::cout << "Liczba zyc zostala juz wczesniej ustalona: " << liczba_zyc_gracza_ << " dla gracza oraz " << liczba_zyc_przeciwnika_ << " dla przeciwnika, sa to wartosci DOMYSLNE" << std::endl;
+	}
+	if (czy_ustawiono_liczbe_zyc_ == false)
+	{
+		int licznik1=0, licznik2=0;
+		for(auto & el : kwadrat_flota_gracza)
+		{
+			if (el.get_czy_kwarat_jest_zajety())
+				licznik1++;
+		}
+		for (auto& el : kwadrat_flota_przeciwnika)
+		{
+			if (el.get_czy_kwarat_jest_zajety())
+				licznik2++;
+		}
+		std::cout << "Jak narazie nie ustwiono liczby zyc i wynosza one odpowiednio " << liczba_zyc_gracza_ << " dla gracza oraz " << liczba_zyc_przeciwnika_ << " dla przeciwnika, sa to wartosci DOMYSLNE" << std::endl;
+		liczba_zyc_gracza_ = licznik1;
+		liczba_zyc_przeciwnika_ = licznik2;
+		std::cout << "Ustwiono liczby zyc: " << liczba_zyc_gracza_ << " dla gracza oraz " << liczba_zyc_przeciwnika_ << " dla przeciwnika" << std::endl << std::endl;
+		czy_ustawiono_liczbe_zyc_ = true;
+	}
+}
+void cSiatka::sprawdz_kogo_ruch(){
+	// 0 -> gracz     1-> przecwinik   2-> wartosc startowa
+	int tmp;
+	if (poprzedni_ruch_ == 2)
+	{
+		tmp = 0;
+		std::cout << "jest to ruch nr["<<numer_ruchu_<<"] nalezacy do GRACZA" << std::endl;
+	}
+	if (poprzedni_ruch_ == 0)
+	{
+		kogo_ruch_ = 1;
+		tmp = 1;
+		std::cout << "jest to ruch nr[" << numer_ruchu_ << "] nalezacy do PRZECIWNIKA" << std::endl;
+	}
+	if (poprzedni_ruch_ == 1)
+	{
+		kogo_ruch_ = 0;
+		tmp = 0;
+		std::cout << "jest to ruch nr[" << numer_ruchu_ << "] nalezacy do GRACZA" << std::endl;
+	}
+	poprzedni_ruch_ = tmp;
+	numer_ruchu_++;
+}
+void cSiatka::gra(double openglX, double openglY) {
+	if (czy_mozna_wyswietlic_menu_strzalow_ == true)
+	{
+		ustaw_liczbe_zyc();
+		sprawdz_kogo_ruch();
 	}
 }
