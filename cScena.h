@@ -7,10 +7,12 @@
 #include "cProstokat.h"
 #include "cStrzal.h"
 #include "cPrzycisk.h"
+#include "cKwadrat.h"
 #include <vector>
 #include <cstdlib>
 #include <ctime>
 #include <string>
+
 
 //bindingi dla callbacków
 void resize_binding(int width, int height);
@@ -27,11 +29,16 @@ class cScena {
 	std::vector<cProstokat> flota_przeciwnika;
 	std::vector<cProstokat> flota_przeciwnika_ustawiona_losowo;
 	std::vector<cPrzycisk> przyciski;
-	std::vector<cStrzal> pociski;
+	std::vector<cStrzal> pociski_gracza;
+	std::vector<cStrzal> pociski_przeciwnika;
+	std::vector<cKwarat> kwadrat_flota_gracza;
+	std::vector<cKwarat> kwadrat_flota_przeciwnika;
 
 	int ostanio_uzyte_id_, liczba_losowych_rozstawien=0;
 	int aktualnie_przersuwany_statek_;
 	bool mozna_obrocic_, czy_wyswietlac_menu_strzalow_,czy_statki_gracza_sa_ustawione_,czy_wyswietlac_juz_statki_gracza_;
+	bool czy_ustawiono_statki_gracza_losowo_ = false;
+	bool czy_ustawiono_statki_gracza_recznie_ = false;
 
 public:
 	cScena(int ostuzid = 0, bool mozna_obr = false, int aktualnieprzesuwstatek = 0, bool czywyswtlmenu = false, bool czy_statki_gracza_losowo=false, bool czy_wyswietlac_juz_statki_gracza=false);
@@ -58,7 +65,17 @@ public:
 	void set_czy_mozna_wyswietlic_menu_strzalow(int wartosc);
 	bool get_czy_mozna_wyswietlic_menu_strzalow();
 
+	void uzupelnij_vektor_pol();
+	void zainicjuj_vektory_pol();
+	void dane_vektora_pol(std::vector<cKwarat> vektor);
+
+	void sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc();
+	void przekopiuj_ustawione_recznie_statki_do_ostatecznego_vektora();
 	void stan_arsenalu();
+
+	void strzal(double x, double y);
+	void gra();
+	void zainicjuj_stan_amunicji_gracza_i_przeciwnika(int& sam_gracz, int& bomb_gracz, int& torp_gracz, int& sam_przeciwnik, int& bomb_przeciwnik, int& torp_przeciwnik);
 };
 
 

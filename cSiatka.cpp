@@ -13,6 +13,7 @@ void cSiatka::zainicjuj_siatke(int x1, int y1, int x2, int y2,int id_siatki){
 	id_siatki_=id_siatki;
 }
 void  cSiatka::rysuj_siatke() { 
+	int licznik = 1;
 	for (int i = x1_; i < x2_; i++)
 	{
 		for (int j = y1_ ; j < y2_; j++)

@@ -30,6 +30,7 @@ public:
 	double get_a();
 	double get_b();
 	int get_id();
+	int get_typ();
 	void set_juz_mnie_obracano(bool wartosc);
 	bool get_juz_mnie_obracano();
 };

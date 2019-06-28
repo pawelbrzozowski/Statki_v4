@@ -91,3 +91,6 @@ void cProstokat::set_juz_mnie_obracano(bool wartosc) {
 bool cProstokat::get_juz_mnie_obracano() {
 	return juz_raz_mnie_obrocono_;
 }
+int cProstokat::get_typ() {
+	return typ_;
+}

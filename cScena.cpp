@@ -87,16 +87,30 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 
 	//DODAJEMY STRZALY
 	cStrzal nalot_samolotu(11, 8.5, 1, 2, false);
-	pociski.push_back(nalot_samolotu);
+	pociski_gracza.push_back(nalot_samolotu);
 
 	cStrzal bombardowanie(11, 6, 2, 1, false);
-	pociski.push_back(bombardowanie);
+	pociski_gracza.push_back(bombardowanie);
 
 	cStrzal torpeda(11, 4.5, 3, 2, false);
-	pociski.push_back(torpeda);
+	pociski_gracza.push_back(torpeda);
 
 	cStrzal zwykly_strzal(11, 3, 4, 1000, true);
-	pociski.push_back(zwykly_strzal);
+	pociski_gracza.push_back(zwykly_strzal);
+
+	cStrzal nalot_samolotu_przeciwnik(11000, 8.5, 1, 2, false);
+	pociski_przeciwnika.push_back(nalot_samolotu);
+
+	cStrzal bombardowanie_przeciwnik(10001, 6, 2, 1, false);
+	pociski_przeciwnika.push_back(bombardowanie);
+
+	cStrzal torpeda_przeciwnik(10001, 4.5, 3, 2, false);
+	pociski_przeciwnika.push_back(torpeda);
+
+	cStrzal zwykly_strzal_przeciwnik(10001, 3, 4, 1000, true);
+	pociski_przeciwnika.push_back(zwykly_strzal);
+
+	zainicjuj_vektory_pol();
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
 	int licznik = 1, liczba_obroconych = 0;
@@ -120,9 +134,12 @@ void cScena::ustaw_statki_gracza_losowo() {
 		licznik++;
 		sprawdz_i_wstaw_gracz(el, licznik, liczba_obroconych, max_liczba_obronych_elementow);
 	}
-	for (auto& el : flota)//nasze ellementy wektora rysujemy dalej, aby nie wyswietlaly sie poniewaz ustawiamy statki w innym vektorze
+	if (czy_ustawiono_statki_gracza_losowo_ == true)
 	{
-		el.set_wartoscx_oraz_y(1000, 1000);
+		for (auto& el : flota)//nasze ellementy wektora rysujemy dalej, aby nie wyswietlaly sie poniewaz ustawiamy statki w innym vektorze
+		{
+			el.set_wartoscx_oraz_y(1000, 1000);
+		}
 	}
 	std::cout << "DANE DLA FLOTY GRACZA:" << std::endl << std::endl;
 	for (auto& el : flota_ustawiona) {
@@ -454,45 +471,21 @@ void cScena::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//czysci buffer i ustawia kolor z glClearColor
 	siatka_1.rysuj_siatke();
 	siatka_2.rysuj_siatke();
-	glPushMatrix();
-	{
-		for (auto& el : flota_przeciwnika_ustawiona_losowo)
-		{
-			el.rysuj();
-		}
-
-	}
-	glPushMatrix();
-	{
-		for (auto& el : flota)
-			el.rysuj();
-	}
-	glPopMatrix();
-	glPushMatrix();
-	{
-		for (auto& el : przyciski)
-			el.rysuj();
-	}
-	glPopMatrix();
-
+	for (auto& el : flota_przeciwnika_ustawiona_losowo)
+		el.rysuj();
+	for (auto& el : flota)
+		el.rysuj();
+	for (auto& el : przyciski)
+		el.rysuj();
 	if (get_czy_mozna_wyswietlic_menu_strzalow() == true)
 	{
-		glPushMatrix();
-		{
-			for (auto& el : pociski)
-				el.rysuj();
-		}
-		glPopMatrix();
-
+	for (auto& el : pociski_gracza)
+		el.rysuj();
 	}
 	if (czy_wyswietlac_juz_statki_gracza_ == true)
 	{
-		glPushMatrix();
-		{
 			for (auto& el : flota_ustawiona)
 				el.rysuj();
-		}
-		glPopMatrix();
 	}
 	glutSwapBuffers();//wyswietla nowa kaltke gdy display jesy wczytywany
 }
@@ -529,6 +522,7 @@ void cScena::init(int argc, char** argv, const char* window_name) {
 	set_callbacks();
 	siatka_1.zainicjuj_siatke(0, 0, 10, 10, 0); //inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
 	siatka_2.zainicjuj_siatke(19, 0, 29, 10, 100);//inicjujemy dane lewy dolny rog i prawy gorny dla danej siatki
+	
 	glutMainLoop();
 }
 void cScena::key(int key) {
@@ -538,55 +532,57 @@ void cScena::mouse(int button, int state, int x, int y) {
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
 		double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
 		double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
-		for (auto& el : flota)
+		if (czy_wyswietlac_menu_strzalow_ == false)
 		{
-			if (el.isClicked(openglX, openglY))
+			for (auto& el : flota)
 			{
-				el.dane();
-				set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
-				set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
-				if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
+				if (el.isClicked(openglX, openglY))
 				{
-					el.obroc();
-					set_ostanio_uzyte_id_statku(0);
-					set_mozna_obrocic_statek(false);
-					for (auto& el : przyciski)
+					el.dane();
+					set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
+					set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
+					if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
 					{
-						if (el.get_typ() == 1)
+						el.obroc();
+						set_ostanio_uzyte_id_statku(0);
+						set_mozna_obrocic_statek(false);
+						for (auto& el : przyciski)
 						{
-							el.dane();
+							if (el.get_typ() == 1)
+							{
+								el.dane();
+							}
 						}
 					}
 				}
+
 			}
 
-		}
-
-		for (auto& el : flota_przeciwnika_ustawiona_losowo)
-		{
-			if (el.isClicked(openglX, openglY))
+			for (auto& el : flota_ustawiona)
 			{
-				el.dane();
-				set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
-				set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
-				if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
+				if (el.isClicked(openglX, openglY))
 				{
-					el.obroc();
-					set_ostanio_uzyte_id_statku(0);
-					set_mozna_obrocic_statek(false);
-					for (auto& el : przyciski)
+					el.dane();
+					set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
+					set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
+					if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
 					{
-						if (el.get_typ() == 1)
+						el.obroc();
+						set_ostanio_uzyte_id_statku(0);
+						set_mozna_obrocic_statek(false);
+						for (auto& el : przyciski)
 						{
-							el.dane();
+							if (el.get_typ() == 1)
+							{
+								el.dane();
+							}
 						}
 					}
 				}
+
 			}
-
 		}
-
-
+		
 
 		for (auto& el : przyciski)
 		{
@@ -594,12 +590,22 @@ void cScena::mouse(int button, int state, int x, int y) {
 			{
 				if (el.get_typ() == 3) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
-					std::cout << "KLIKNIETO DALEJ " << std::endl;
-					set_czy_mozna_wyswietlic_menu_strzalow(true);
-					stan_arsenalu();
+					
+						przekopiuj_ustawione_recznie_statki_do_ostatecznego_vektora();
+						std::cout << "KLIKNIETO DALEJ " << std::endl;
+						uzupelnij_vektor_pol(); //modyfikuje wartosci zajete dla poszczegolnych kwadratow
+						set_czy_mozna_wyswietlic_menu_strzalow(true);
+						stan_arsenalu();
+						gra();
+					
+						
 				}
 				if (el.get_typ() == 2) // sprawdzanie czy klinketo na przycisk dalej, gdy tak ustwaimy jego stan na true
 				{
+					czy_ustawiono_statki_gracza_losowo_ == true;
+
+					sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc();
+
 					if (czy_statki_gracza_sa_ustawione_ == true)
 					{
 						wyczysc_dane_ustawionej_floty();
@@ -620,6 +626,8 @@ void cScena::mouse(int button, int state, int x, int y) {
 				el.dane();
 			}
 		}
+
+
 	}
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
 		double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
@@ -628,15 +636,28 @@ void cScena::mouse(int button, int state, int x, int y) {
 		{
 			el.isUnclicked(openglX, openglY);
 			el.dopasuj_element_na_planszy();
-
 		}
-
+		for (auto& el : flota_ustawiona)
+		{
+			el.isUnclicked(openglX, openglY);
+			el.dopasuj_element_na_planszy();
+		}
 	}
 }
 void cScena::mouse_move(int x, int y) {
 	double openglX = (((double)DLUGOSC_GL) / ((double)WIELKOSC_OKNA_X)) * ((double)x);
 	double openglY = ((double)WYSOKOSC_GL) - ((((double)WYSOKOSC_GL) / ((double)WIELKOSC_OKNA_Y)) * ((double)y));
 	for (auto& el : flota)
+	{
+		if (el.isClicked(openglX, openglY)) //sprawdzic czy dany el jest akywny
+		{
+			if (el.get_id() == get_aktualnie_przesuwany_statek())
+			{
+				el.podazaj_za_myszka(openglX, openglY);
+			}
+		}
+	}
+	for (auto& el : flota_ustawiona)
 	{
 		if (el.isClicked(openglX, openglY)) //sprawdzic czy dany el jest akywny
 		{
@@ -679,7 +700,7 @@ void cScena::stan_arsenalu() {
 	std::cout << "|------------------------------------------------|" << std::endl;
 	std::cout << "|Pozostalo Ci:                                   |" << std::endl;
 	std::cout << "|                                                |" << std::endl;
-	for (auto& el : pociski)
+	for (auto& el : pociski_gracza)
 	{
 		tmp = el.get_typ();
 		switch (tmp)
@@ -704,4 +725,155 @@ void cScena::stan_arsenalu() {
 	}
 	std::cout << "|                                                |" << std::endl;
 	std::cout << "|------------------------------------------------|" << std::endl;
+}
+void cScena::uzupelnij_vektor_pol() {
+	int ilosc_ustawionych_pol_gracz = 0, ilosc_ustawionych_pol_przeciwnik = 0;
+	for (auto& el : flota_przeciwnika_ustawiona_losowo)
+	{
+		int x_poczatek, x_koniec, y_poczatek, y_koniec;
+		x_poczatek = el.get_x();
+		x_koniec = el.get_x() + el.get_a();
+		y_poczatek = el.get_y();
+		y_koniec = el.get_b() + el.get_y();
+		for (int i = x_poczatek; i < x_koniec; i++)
+		{
+			for (int j = y_poczatek; j < y_koniec; j++)
+			{
+				for (auto& el2 : kwadrat_flota_przeciwnika)
+				{
+					if ((el2.get_x() == i) && (el2.get_y() == j))
+					{
+						el2.set_czy_kwarat_jest_zajety(true);
+						el2.set_typ_statku(el.get_typ());
+						ilosc_ustawionych_pol_przeciwnik++;
+					}
+				}
+			}
+		}
+	}
+	for (auto& el : flota_ustawiona)
+	{
+		int x_poczatek, x_koniec, y_poczatek, y_koniec;
+		x_poczatek = el.get_x();
+		x_koniec = el.get_x() + el.get_a();
+		y_poczatek = el.get_y();
+		y_koniec = el.get_b() + el.get_y();
+		for (int i = x_poczatek; i < x_koniec; i++)
+		{
+			for (int j = y_poczatek; j < y_koniec; j++)
+			{
+				for (auto& el2 : kwadrat_flota_gracza)
+				{
+					if ((el2.get_x() == i) && (el2.get_y() == j))
+					{
+						el2.set_czy_kwarat_jest_zajety(true);
+						el2.set_typ_statku(el.get_typ());
+						ilosc_ustawionych_pol_gracz++;
+					}
+				}
+			}
+		}
+	}
+	std::cout << "Ustawiono status zajety dla: " << ilosc_ustawionych_pol_gracz << " pol na planszy gracza oraz dla: " << ilosc_ustawionych_pol_przeciwnik << " pol na plasnszy przeciwnika" << std::endl << std::endl;
+	std::cout << "INFORMACJE dla kwadratow z floty GRACZA:" << std::endl;
+	dane_vektora_pol(kwadrat_flota_gracza);
+	std::cout << "INFORMACJE dla kwadratow z floty PRZECIWNIKA:" << std::endl;
+	dane_vektora_pol(kwadrat_flota_przeciwnika);
+}
+void cScena::dane_vektora_pol(std::vector<cKwarat> vektor) {
+	for (auto& el : vektor)
+	{
+		//if(el.get_czy_kwarat_jest_zajety()==true)
+		if (el.get_id() <= 9)
+		{
+			if (el.get_czy_kwarat_jest_zajety() == true)
+			{
+				std::cout << "Pole nr: 0" << el.get_id() << " ma wspolrzedne: (" << el.get_x() << "," << el.get_y() << "), jego stan to ZAJETY [" << el.get_czy_kwarat_jest_zajety() << "]" <<" przez "<<el.get_typ_statku()<<"masztowiec"<< std::endl;
+			}
+			else
+			{
+				//std::cout << "Pole nr: 0" << el.get_id() << " ma wspolrzedne: (" << el.get_x() << "," << el.get_y() << "), jego stan to wolny  [" << el.get_czy_kwarat_jest_zajety() << "]" << std::endl;
+			}
+		}
+		else
+		{
+			if (el.get_czy_kwarat_jest_zajety() == true)
+			{
+				std::cout << "Pole nr: " << el.get_id() << " ma wspolrzedne: (" << el.get_x() << "," << el.get_y() << "), jego stan to ZAJETY [" << el.get_czy_kwarat_jest_zajety() << "]" << " przez " << el.get_typ_statku() << "masztowiec" << std::endl;
+			}
+			else
+			{
+				//std::cout << "Pole nr: " << el.get_id() << " ma wspolrzedne: (" << el.get_x() << "," << el.get_y() << "), jego stan to  wolny [" << el.get_czy_kwarat_jest_zajety() << "]" << std::endl;
+			}
+		}
+			
+	}
+}
+void cScena::zainicjuj_vektory_pol() {
+	int licznik = 1, licznik_2 = 1;
+
+	for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				cKwarat tmp;
+				tmp.zainicjuj_kwadrat(i, j, licznik);
+				kwadrat_flota_gracza.push_back(tmp);
+				licznik++;
+			}
+		}
+	for (int i = 19; i < 29; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				cKwarat tmp;
+				tmp.zainicjuj_kwadrat(i, j, licznik_2);
+				kwadrat_flota_przeciwnika.push_back(tmp);
+				licznik_2++;
+			}
+		}
+	std::cout << "INICJACJA VEKTOROW POL KWADRATOW:" << std::endl;
+	if ((kwadrat_flota_gracza.size() == 100) && (kwadrat_flota_przeciwnika.size() == 100))
+	{
+		std::cout << "SUKCES -> stworzono " << kwadrat_flota_gracza.size() << " pol dla siatki gracza oraz " << kwadrat_flota_przeciwnika.size() << " pol dla siatki przeciwnika" << std::endl << std::endl;
+	}
+	else
+	{
+		std::cout << "COS POSZLO NIE TAK -> stworzono " << kwadrat_flota_gracza.size() << " pol dla siatki gracza oraz " << kwadrat_flota_przeciwnika.size() << " pol dla siatki przeciwnika" << std::endl << std::endl;
+	}
+}
+void cScena::przekopiuj_ustawione_recznie_statki_do_ostatecznego_vektora()
+{
+	if (czy_ustawiono_statki_gracza_losowo_ == false)
+	{
+		czy_ustawiono_statki_gracza_recznie_ == true;
+		for (auto& el : flota)
+		{
+			flota_ustawiona.push_back(el);
+		}
+	}
+	czy_ustawiono_statki_gracza_recznie_ == true;
+	
+}
+void cScena::sprawdz_czy_nie_ustawiono_statkow_recznie_w_razie_co_wyczysc() {
+	if(czy_ustawiono_statki_gracza_losowo_ == false)
+		for (auto& el : flota)
+		{
+			el.set_wartoscx_oraz_y(1000, 1000);
+		}
+}
+void cScena::gra() {
+	int zycie_gracza = 20, zycie_przeciwnika = 20;
+	int nalot_samolotu_gracz, bombardowanie_gracz, torpeda_gracz;
+	int nalot_samolotu_przeciwnik, bombardowanie_przeciwnik, torpeda_przeciwnik;
+	for (;;)
+	{
+
+	}
+}
+void cScena::strzal(double x, double y) {
+
+}
+void cScena::zainicjuj_stan_amunicji_gracza_i_przeciwnika(int& sam_gracz, int& bomb_gracz, int& torp_gracz, int& sam_przeciwnik, int& bomb_przeciwnik, int& torp_przeciwnik) {
+
 }

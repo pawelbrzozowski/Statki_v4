@@ -1,7 +1,7 @@
 #ifndef CSIATKA_H_INCLUDED
 #define CSIATKA_H_INCLUDED
 #endif
-
+#include <vector>
 
 class cSiatka {
 	int x1_, y1_, x2_, y2_, id_siatki_;
