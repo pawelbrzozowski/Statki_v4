@@ -21,6 +21,7 @@ public:
 	bool isClicked(double openglX, double openglY);
 	bool isUnclicked(double openglX, double openglY);
 	void dane();
+	void dane_rozlozenia_losowego();
 	void obroc();
 	void set_wartoscx_oraz_y(int wartosc_x,int wartosc_y);
 	double get_x();

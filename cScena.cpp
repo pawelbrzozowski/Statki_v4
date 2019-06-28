@@ -96,8 +96,8 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 	pociski.push_back(zwykly_strzal);
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
-	srand(time(NULL));
 	int licznik = 1;
+	srand(time(NULL));
 	for (auto& el : flota_przeciwnika) {
 		licznik++;
 		sprawdz_i_wstaw(el, licznik++);
@@ -105,9 +105,12 @@ void cScena::ustaw_statki_przeciwnika_losowo() {
 
 }
 void cScena::sprawdz_i_wstaw(cProstokat element, int licznik) {
+	
 	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
-	double wylosowana_x = (std::rand() % 10) + 19;
+	double wylosowana_x = (std::rand() % 10) + 18;
 	double wylosowana_y = (std::rand() % 10) + 0;
+	bool czy_byla_kolizja = false;
+	
 	if (licznik == 1)
 	{
 		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
@@ -120,13 +123,30 @@ void cScena::sprawdz_i_wstaw(cProstokat element, int licznik) {
 		{
 			if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
 			{
-				std::cout << "NASTAPILA KOLIZJA! " << std::endl;
+				int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
+				obszar_x = el.get_x() + el.get_a();
+				obszar_y = el.get_y() + el.get_b();
+				obszar_x_2 = element.get_x() + element.get_a();
+				obszar_y_2 = element.get_y() + element.get_b();
+				std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
+				std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
+				std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
+				std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" <<el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " <<obszar_y << ")" << std::endl << std::endl;
+				std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << element.get_x() << "," << obszar_x_2 << ") oraz Y(" << element.get_y() << ", " << obszar_y_2 << ")" << std::endl << std::endl;
+				std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
+				std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
 				sprawdz_i_wstaw(element, licznik_do_ewentualnego_wywolania_jeszcze_raz);
+				czy_byla_kolizja = true;
 				break;
 			}
 		}
-		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
-		flota_przeciwnika_ustawiona_losowo.push_back(element);
+		if (czy_byla_kolizja == false)
+		{
+			element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+			element.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statek zostal umieszonczy 
+			flota_przeciwnika_ustawiona_losowo.push_back(element);
+		}
+		czy_byla_kolizja = false;
 	}
 	
 
@@ -157,7 +177,10 @@ void cScena::display() {
 	glPushMatrix();
 	{
 		for (auto& el : flota_przeciwnika_ustawiona_losowo)
+		{
 			el.rysuj();
+		}
+			
 	}
 	glPushMatrix();
 	{
@@ -250,6 +273,32 @@ void cScena::mouse(int button, int state, int x, int y) {
 			}
 			
 		}
+
+							for (auto& el : flota_przeciwnika_ustawiona_losowo)
+							{
+								if (el.isClicked(openglX, openglY))
+								{
+									el.dane();
+									set_ostanio_uzyte_id_statku(el.get_id()); //ustawiamy parametr sceny ostanie_uzyte_id na wartosc id statku ktory klinlelismy
+									set_aktualnie_przesuwany_statek(el.get_id()); //ustawiamy parametr sceny aktualnie_przesuwany_statek na ide statku wlasnie kliknietego
+									if ((get_ostanio_uzyte_id_statku() > 0) && (get_mozna_obrocic_statek()))
+									{
+										el.obroc();
+										set_ostanio_uzyte_id_statku(0);
+										set_mozna_obrocic_statek(false);
+										for (auto& el : przyciski)
+										{
+											if (el.get_typ() == 1)
+											{
+												el.dane();
+											}
+										}
+									}
+								}
+
+							}
+
+
 
 		for (auto& el : przyciski)
 		{

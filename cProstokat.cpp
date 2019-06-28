@@ -20,6 +20,9 @@ void cProstokat::rysuj() {
 void cProstokat::dane() {
 	std::cout << "Klinieto na statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "masztowiec " << "ID STATKU ---> " << id_ << endl;
 }
+void cProstokat::dane_rozlozenia_losowego() {
+	std::cout << "UMIESZCZONO statek (" << x_ << "," << y_ << ")" << " dlugosc to " << a_ << "natomiast wysokosc " << b_ << " jest to: " << typ_ << "-masztowiec " << "ID STATKU ---> " <<"["<< id_<<"]" << endl << endl;
+}
 void cProstokat::set_kolor(float r, float g, float b) {
 	red_ = r;
 	green_ = g;
