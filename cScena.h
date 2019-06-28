@@ -10,6 +10,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 //bindingi dla callbacków
 void resize_binding(int width, int height);
@@ -51,6 +52,8 @@ public:
 
 	void set_czy_mozna_wyswietlic_menu_strzalow(int wartosc);
 	bool get_czy_mozna_wyswietlic_menu_strzalow();
+
+	void stan_arsenalu();
 };
 
 

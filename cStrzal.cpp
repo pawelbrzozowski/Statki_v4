@@ -26,3 +26,9 @@ void cStrzal::rysuj() {
 	glColor3d(red_, green_, blue_);
 	glRectd(x_, y_, x_ + a_, y_ + b_);
 }
+double cStrzal::get_ilosc_uzyc_pozostala() {
+	return ilosc_uzyc_;
+}
+int cStrzal::get_typ() {
+	return typ_strzalu_;
+}

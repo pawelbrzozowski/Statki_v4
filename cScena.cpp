@@ -253,6 +253,7 @@ void cScena::mouse(int button, int state, int x, int y) {
 				{
 					std::cout << "KLIKNIETO DALEJ " << std::endl;
 					set_czy_mozna_wyswietlic_menu_strzalow(true);
+					stan_arsenalu();
 				}
 				if (el.get_typ() == 1)
 				{
@@ -312,4 +313,36 @@ void cScena::set_czy_mozna_wyswietlic_menu_strzalow(int wartosc) {
 }
 bool cScena::get_czy_mozna_wyswietlic_menu_strzalow() {
 	return czy_wyswietlac_menu_strzalow_;
+}
+void cScena::stan_arsenalu() {
+	std::string a="nalotu", b="bombardowania", c="torped", d="zwyklego ostrzalu";
+	int tmp;
+	std::cout << "|------------------------------------------------|" << std::endl;
+	std::cout << "|Pozostalo Ci:                                   |" << std::endl;
+	std::cout << "|                                                |" << std::endl;
+	for (auto& el : pociski)
+	{
+		tmp = el.get_typ();
+		switch (tmp)
+		{
+		case 1:
+		{
+			std::cout << "|  ["<<el.get_ilosc_uzyc_pozostala()<<"] uzyc "<< a<<"                               |" << std::endl;
+		}break;
+		case 2:
+		{
+			std::cout << "|  [" << el.get_ilosc_uzyc_pozostala() << "] uzyc " << b << "                        |" << std::endl;
+		}break;
+		case 3:
+		{
+			std::cout << "|  [" << el.get_ilosc_uzyc_pozostala() << "] uzyc " << c << "                               |" << std::endl;
+		}break;
+		case 4:
+		{
+			std::cout << "|  [nieskonczonosc] uzyc " << d << "       |" << std::endl;
+		}break;
+		}
+	}
+	std::cout << "|                                                |" << std::endl;
+	std::cout << "|------------------------------------------------|" << std::endl;
 }
