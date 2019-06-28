@@ -46,8 +46,8 @@ public:
 	void mouse_move(int x, int  y);
 	void mouse(int button, int state, int x, int y);
 
-	void sprawdz_i_wstaw(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik);
-
+	void sprawdz_i_wstaw(cProstokat element, int licznik, int& liczba_obroconych_elementow, int max_liczba_obronych_elementow);
+	void sprawdz_i_wstaw_gracz(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik);
 	void set_ostanio_uzyte_id_statku(int wartosc);
 	int get_ostanio_uzyte_id_statku();
 	void set_mozna_obrocic_statek(int wartosc);

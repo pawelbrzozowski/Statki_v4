@@ -99,15 +99,17 @@ cScena::cScena(int ostuzid, bool mozna_obr, int aktualnieprzesuwstatek, bool czy
 	pociski.push_back(zwykly_strzal);
 }
 void cScena::ustaw_statki_przeciwnika_losowo() {
-	int licznik = 1;
+	int licznik = 1, liczba_obroconych = 0;
 	srand(time(NULL));
+	int max_liczba_obronych_elementow = (std::rand() % 10);
 	for (auto& el : flota_przeciwnika) {
 		licznik++;
-		sprawdz_i_wstaw(el, licznik,18,0,28,10,2);
+		sprawdz_i_wstaw(el, licznik, liczba_obroconych, max_liczba_obronych_elementow);
 	}
 	for (auto& el : flota_przeciwnika_ustawiona_losowo) {
 		el.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statki zostal umieszonczy 
 	}
+
 
 }
 void cScena::ustaw_statki_gracza_losowo() {
@@ -115,133 +117,164 @@ void cScena::ustaw_statki_gracza_losowo() {
 	srand(time(NULL));
 	for (auto& el : flota) {
 		licznik++;
-		sprawdz_i_wstaw(el, licznik, 0, 0, 10, 10, 1);
+		//sprawdz_i_wstaw(el, licznik);
 	}
 	for (auto& el : flota_przeciwnika_ustawiona_losowo) {
 		el.dane_rozlozenia_losowego(); //dostajemy informacje gdzie statki zostal umieszonczy 
 	}
 }
-void cScena::sprawdz_i_wstaw(cProstokat element, int licznik, int zakres_los_x, int zakres_los_y, int zakres_los_x_max, int zakres_los_y_max, int gracz_czy_przeciwnik) {
-	// zakres los x = 18
-	// zakres los x = 0
-	//zakres los maxx = 28
-	//zakres los maxy = 10
-	// gracz_czy_przeciwnik = 2
-	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
-	double wylosowana_x = (std::rand() % 10) + zakres_los_x;
-	double wylosowana_y = (std::rand() % 10) + zakres_los_y;
-	int czy_obrocic = (std::rand() % 10);
-	bool czy_byla_kolizja = false;
-	if (gracz_czy_przeciwnik == 2)
-	{
-		if (wylosowana_x < 19)
-			wylosowana_x = 19;
-	}
-	if (gracz_czy_przeciwnik == 1)
-	{
-		if (wylosowana_x == 10)
-			wylosowana_x = 9;
-	}
-	if (czy_obrocic >= 5) //tutaj poprostu odwracamy element i dopiero ptoem martwimy sie gdzie go wstawic
-	{
-		std::cout << "Sprawdzam czy statek z id=[ " << element.get_id() << " ] mozna obrocic" << std::endl;
-		if ((element.get_x() + element.get_b() < zakres_los_x_max) && (element.get_y() + element.get_a() < zakres_los_y_max))
-		{
-			element.obroc();
-			element.set_juz_mnie_obracano(true);
-			std::cout << "pomyslnie obrocono statek z id = [" << element.get_id() << " ]" << std::endl;
-		}
-		else
-		{
-			int obszar_x_2, obszar_y_2;
-			obszar_x_2 = wylosowana_x + element.get_b();
-			obszar_y_2 = wylosowana_y + element.get_a();
-			std::cout << "blad w obracniu statku z id = [" << element.get_id() << " ]" << std::endl;
-			std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl;
-			int ile_odjac_w_x, ile_odjac_w_y;
-			if (element.get_x() + element.get_b() < zakres_los_x_max)
-			{
-				ile_odjac_w_x = obszar_x_2 - zakres_los_x_max;
-				wylosowana_x = wylosowana_x - ile_odjac_w_x;
-			}
-			if (element.get_y() + element.get_a() < zakres_los_x_max)
-			{
-				ile_odjac_w_y = obszar_y_2 - zakres_los_y_max;
-				wylosowana_y = wylosowana_y - ile_odjac_w_y;
-			}
-			element.obroc();
-			element.set_juz_mnie_obracano(true);
-			std::cout << "Przesunieto statek z id=[" << element.get_id() << "], jego obszar wynosi teraz: X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl;
-		}
 
+void cScena::sprawdz_i_wstaw(cProstokat element, int licznik, int& liczba_obroconych,int max_liczba_obronych_elementow) {
+	int licznik_do_ewentualnego_wywolania_jeszcze_raz = licznik;
+	int liczba_obroconych_elementow = liczba_obroconych;
+	double wylosowana_x = (std::rand() % 10) + 18;
+	double wylosowana_y = (std::rand() % 10) + 0;
+	int czy_obrocic = (std::rand() % 10);
+	bool czy_byla_kolizja = false, czy_byl_problem_z_odwroceniem = false;
+	
+	if (wylosowana_x < 19)
+			wylosowana_x = 19;
+	if (czy_obrocic >= 5) //tutaj poprostu odwracamy element
+	{
+		if (liczba_obroconych_elementow < max_liczba_obronych_elementow)//losowa ilosc max obronych el.
+		{
+			int obszar_x, obszar_y;
+			obszar_x = element.get_b() + wylosowana_x;
+			obszar_y = element.get_a() + wylosowana_y;
+			if ((obszar_x < 29) && (obszar_y < 10))
+			{
+				if (licznik == 1) //nie trzeba sprawdzac czy nastapi kolizja
+				{
+					element.obroc();
+					element.set_juz_mnie_obracano(true);
+					liczba_obroconych_elementow++;
+				}
+				if (licznik > 1)
+				{
+					for (auto& el : flota_przeciwnika_ustawiona_losowo)
+					{
+						int obszar_min_x, obszar_max_x, obszar_min_y, obszar_max_y;
+						obszar_min_x = el.get_x() - 1;
+						obszar_max_x = el.get_x() + el.get_a() + 1;
+						obszar_min_y = el.get_y() - 1;
+						obszar_max_y = el.get_y() + el.get_b() + 1;
+						if (((wylosowana_x >= obszar_min_x) && (wylosowana_x < obszar_max_x)) && ((wylosowana_y >= obszar_min_y) && (wylosowana_y < obszar_max_y)))
+						{
+							czy_byl_problem_z_odwroceniem = true;
+							break;
+						}
+					}
+					if (czy_byl_problem_z_odwroceniem == false)
+					{
+						element.obroc();
+						element.set_juz_mnie_obracano(true);
+						liczba_obroconych_elementow++;
+					}
+					czy_byl_problem_z_odwroceniem = false;
+				}
+			}
+		}
 	}
 	if (licznik == 1)
 	{
-		element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
-		if (gracz_czy_przeciwnik == 2)
-		{
-			flota_przeciwnika_ustawiona_losowo.push_back(element);
-		}
-		if (gracz_czy_przeciwnik == 1)
-		{
-			flota_ustawiona.push_back(element);
-		}
-	}
-	if (licznik > 1)
-	{
-		if (gracz_czy_przeciwnik == 2)
-		{
-			for (auto& el : flota_przeciwnika_ustawiona_losowo)
-			{
-				if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
-				{
-					int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
-					obszar_x = el.get_x() + el.get_a();
-					obszar_y = el.get_y() + el.get_b();
-					obszar_x_2 = wylosowana_x + element.get_a();
-					obszar_y_2 = wylosowana_y + element.get_b();
-					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
-					std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
-					std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
-					std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" << el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " << obszar_y << ")" << std::endl << std::endl;
-					std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
-					std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
-					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
-					sprawdz_i_wstaw(element, licznik, zakres_los_x, zakres_los_y, zakres_los_x_max, zakres_los_y_max, gracz_czy_przeciwnik);
-					czy_byla_kolizja = true;
-					break;
-				}
-			}
-		}
-		if (gracz_czy_przeciwnik == 1)
-		{
-			for (auto& el : flota_ustawiona)
-			{
-				if ((wylosowana_x >= el.get_x() && wylosowana_x < el.get_x() + el.get_a()) && (wylosowana_y >= el.get_y() && wylosowana_y < el.get_y() + el.get_b()))
-				{
-					int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
-					obszar_x = el.get_x() + el.get_a();
-					obszar_y = el.get_y() + el.get_b();
-					obszar_x_2 = wylosowana_x + element.get_a();
-					obszar_y_2 = wylosowana_y + element.get_b();
-					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
-					std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
-					std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
-					std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" << el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " << obszar_y << ")" << std::endl << std::endl;
-					std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
-					std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
-					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
-					sprawdz_i_wstaw( element, licznik,  zakres_los_x, zakres_los_y,  zakres_los_x_max, zakres_los_y_max, gracz_czy_przeciwnik);
-					czy_byla_kolizja = true;
-					break;
-				}
-			};
-		}
-		
-		if (czy_byla_kolizja == false)
+		int obszar_x, obszar_y;
+		obszar_x = element.get_a() + wylosowana_x;
+		obszar_y = element.get_b() + wylosowana_y;
+		if ((obszar_x < 29) && (obszar_y < 10)) // ewentualne sprawdzenie czy jest blad i stsatek wsyatje z planszy
 		{
 			element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
 			flota_przeciwnika_ustawiona_losowo.push_back(element);
+		}
+		else
+		{
+			std::cout << "Statek z id=[ " << element.get_id() << " ] wystaje z planszy" << std::endl << std::endl;
+			sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+		}
+		
+	}
+	if (licznik > 1)
+	{			
+			for (auto& el : flota_przeciwnika_ustawiona_losowo)
+			{
+				int obszar_min_x_juz_zarezerowany, obszar_max_x_juz_zarezerowany, obszar_min_y_juz_zarezerowany, obszar_max_y_juz_zarezerowany;
+				obszar_min_x_juz_zarezerowany = el.get_x() - 1;
+				obszar_max_x_juz_zarezerowany = el.get_x() + el.get_a() + 1;
+				obszar_min_y_juz_zarezerowany = el.get_y() - 1;
+				obszar_max_y_juz_zarezerowany = el.get_y() + el.get_b() + 1;
+				int lewy_dolny_x, lewy_dolny_y , prawy_dolny_x, prawy_dolny_y , lewy_gorny_x, lewy_gory_y,  prawy_gorny_x, prawy_gorny_y;
+				lewy_dolny_x = wylosowana_x;
+				lewy_dolny_y = wylosowana_y;
+				prawy_dolny_x = wylosowana_x + element.get_a();
+				prawy_dolny_y = wylosowana_y;
+				lewy_gorny_x = wylosowana_x;
+				lewy_gory_y = wylosowana_y + element.get_b();
+				prawy_gorny_x = wylosowana_x + element.get_a();
+				prawy_gorny_y = wylosowana_y + element.get_b();
+
+				if (((lewy_dolny_x > obszar_min_x_juz_zarezerowany) && (lewy_dolny_x < obszar_max_x_juz_zarezerowany)) && ((lewy_dolny_y > obszar_min_y_juz_zarezerowany) && (lewy_dolny_y < obszar_max_y_juz_zarezerowany)))
+				{
+					sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+					czy_byla_kolizja = true;
+					break;
+				}
+				
+
+				if (((prawy_dolny_x > obszar_min_x_juz_zarezerowany) && (prawy_dolny_x < obszar_max_x_juz_zarezerowany))&& ((prawy_dolny_y > obszar_min_y_juz_zarezerowany) && (prawy_dolny_y < obszar_max_y_juz_zarezerowany)))
+				{
+					sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+					czy_byla_kolizja = true;
+					break;
+				}
+
+				if (((lewy_gorny_x > obszar_min_x_juz_zarezerowany) && (lewy_gorny_x < obszar_max_x_juz_zarezerowany)) && ((lewy_gory_y > obszar_min_y_juz_zarezerowany) && (lewy_gory_y < obszar_max_y_juz_zarezerowany)))
+				{
+					sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+					czy_byla_kolizja = true;
+					break;
+				}
+				if (((prawy_gorny_x > obszar_min_x_juz_zarezerowany) && (prawy_gorny_x < obszar_max_x_juz_zarezerowany)) && ((prawy_gorny_y > obszar_min_y_juz_zarezerowany) && (prawy_gorny_y < obszar_max_y_juz_zarezerowany)))
+				{
+					sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+					czy_byla_kolizja = true;
+					break;
+				}
+				/*if (((wylosowana_x >= obszar_min_x_juz_zarezerowany) && (wylosowana_x < obszar_max_x_juz_zarezerowany)) && ((wylosowana_y >= obszar_min_y_juz_zarezerowany) && (wylosowana_y < obszar_max_y_juz_zarezerowany)))
+				{
+					int obszar_x, obszar_y, obszar_x_2, obszar_y_2;
+					obszar_x = el.get_x() + el.get_a();
+					obszar_y = el.get_y() + el.get_b();
+					obszar_x_2 = wylosowana_x + element.get_a();
+					obszar_y_2 = wylosowana_y + element.get_b();
+					/*std::cout << "---------------------------------------------------------------------------------------------------" << std::endl;
+					std::cout << "NASTAPILA KOLIZJA!" << std::endl << std::endl;
+					std::cout << "Statek z id=[ " << element.get_id() << " ] probowano umiescic na polu zajetym przez statek z id=[ " << el.get_id() << " ]" << std::endl << std::endl;
+					std::cout << "Obszar zarezerwoany przez statek z id=[" << el.get_id() << "] wynosi X(" << el.get_x() << "," << obszar_x << ") oraz Y(" << el.get_y() << ", " << obszar_y << ")" << std::endl << std::endl;
+					std::cout << "Obszar ktory probowano zarezerowac dla staku z id=[" << element.get_id() << "] wynosi X(" << wylosowana_x << "," << obszar_x_2 << ") oraz Y(" << wylosowana_y << ", " << obszar_y_2 << ")" << std::endl << std::endl;
+					std::cout << "Losuje nowe miejsce dla statku z id=[" << element.get_id() << "]" << std::endl;
+					std::cout << "---------------------------------------------------------------------------------------------------" << std::endl << std::endl;
+					sprawdz_i_wstaw(element, licznik);
+					czy_byla_kolizja = true;
+					break;
+				}*/
+			
+			}
+		
+		if (czy_byla_kolizja == false)
+		{
+			int obszar_x, obszar_y;
+			obszar_x = element.get_a() + wylosowana_x;
+			obszar_y = element.get_b() + wylosowana_y;
+			if ((obszar_x < 29) && (obszar_y < 10)) // ewentualne sprawdzenie czy jest blad i stsatek wsyatje z planszy
+			{
+				element.set_wartoscx_oraz_y(wylosowana_x, wylosowana_y);
+				flota_przeciwnika_ustawiona_losowo.push_back(element);
+			}
+			else
+			{
+				std::cout << "Statek z id=[ " << element.get_id() << " ] wystaje z planszy, wartosc X to: ("<<wylosowana_x<<","<<obszar_x<<")" <<"; wartosc Y to: (" << wylosowana_y << "," << obszar_y << ")" << std::endl << std::endl;
+				std::cout << "Losuje nowe dane" << std::endl << std::endl;
+				sprawdz_i_wstaw(element, licznik, liczba_obroconych, max_liczba_obronych_elementow);
+			}
 		}
 		czy_byla_kolizja = false; //reset do wartoscii pcozatkowej w rpzydapku gdy wykryto kolzije(aby nie dodac do vektora dodatkowo
 
